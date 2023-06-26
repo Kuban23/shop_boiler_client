@@ -1,6 +1,8 @@
 import React, { MutableRefObject } from 'react'
 
 import styles from './authPage.module.scss'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
+import SignUpForm from '@/components/modules/AuthPage/SignUpForm'
 const AuthPage = () => {
   const switchCtn = React.useRef() as MutableRefObject<HTMLDivElement>
   const switchC1 = React.useRef() as MutableRefObject<HTMLDivElement>
@@ -9,6 +11,8 @@ const AuthPage = () => {
   const switchCircle2 = React.useRef() as MutableRefObject<HTMLDivElement>
   const aContainer = React.useRef() as MutableRefObject<HTMLDivElement>
   const bContainer = React.useRef() as MutableRefObject<HTMLDivElement>
+  // Применил кастомный хук чтобы убрать после 800 текст и описание
+  const isMedia800 = useMediaQuery(800)
 
   // const switchCtn: MutableRefObject<HTMLDivElement> = React.useRef()
   // // let switchCtn = useRef() as MutableRefObject<HTMLDivElement>
@@ -25,7 +29,8 @@ const AuthPage = () => {
   // // const aContainer = document.querySelector('#a-container')
   // const bContainer: MutableRefObject<HTMLDivElement> = React.useRef()
   // // const bContainer = document.querySelector('#b-container')
-  console.log(switchC2)
+
+  // console.log(switchC2)
   const switchForm = () => {
     switchCtn.current.classList.add(styles.is_gx)
     setTimeout(() => {
@@ -51,7 +56,8 @@ const AuthPage = () => {
         ref={aContainer}
       >
         <div className={styles.container__inner}>
-          <form className={styles.form}>
+          <SignUpForm switchForm={switchForm} />
+          {/* <form className={styles.form}>
             <h2 className={`${styles.form__title} ${styles.title}`}>
               Создать аккаунт
             </h2>
@@ -75,11 +81,11 @@ const AuthPage = () => {
             >
               Зарегистрироваться
             </button>
-          </form>
+          </form> */}
         </div>
       </div>
       <div
-        className={`${styles.container} ${styles.bcontainer}`}
+        className={`${styles.container} ${styles.b_container}`}
         id="b-container"
         ref={bContainer}
       >
@@ -113,13 +119,19 @@ const AuthPage = () => {
           ref={switchCircle2}
         />
         <div className={styles.switch__container} id="switch-c1" ref={switchC1}>
-          <h2 className={`${styles.switch__title} ${styles.title}`}>
-            Добро пожаловать!
-          </h2>
-          <p className={`${styles.switch__description} ${styles.description}`}>
-            Чтобы оставаться на связи с нами, пожалуйста, войдите под своей
-            личной информацией
-          </p>
+          {!isMedia800 && (
+            <>
+              <h2 className={`${styles.switch__title} ${styles.title}`}>
+                Добро пожаловать!
+              </h2>
+              <p
+                className={`${styles.switch__description} ${styles.description}`}
+              >
+                Чтобы оставаться на связи с нами, пожалуйста, войдите под своей
+                личной информацией
+              </p>
+            </>
+          )}
           <button
             onClick={switchForm}
             className={`${styles.switch__button} ${styles.button} ${styles.switch_btn}`}
@@ -132,12 +144,18 @@ const AuthPage = () => {
           id="switch-c2"
           ref={switchC2}
         >
-          <h2 className={`${styles.switch__title} ${styles.title}`}>
-            Привет, друг!
-          </h2>
-          <p className={`${styles.switch__description} ${styles.description}`}>
-            Введите свои личные данные
-          </p>
+          {!isMedia800 && (
+            <>
+              <h2 className={`${styles.switch__title} ${styles.title}`}>
+                Привет!
+              </h2>
+              <p
+                className={`${styles.switch__description} ${styles.description}`}
+              >
+                Введите свои личные данные
+              </p>
+            </>
+          )}
           <button
             onClick={switchForm}
             className={`${styles.switch__button} ${styles.button} ${styles.switch_btn}`}
