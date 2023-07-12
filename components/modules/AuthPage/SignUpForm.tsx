@@ -1,13 +1,17 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 
 import NameInput from '@/components/elements/AuthPage/NameInput'
 import styles from '../../templates/AuthPage/authPage.module.scss'
 import { IInputs } from '@/types/auth'
 import EmailInput from '@/components/elements/AuthPage/EmailInput'
 import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
+import { fetchRegister } from '@/redux/slices/auth'
 
 const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
+  const dispatch = useDispatch()
+
   const {
     register,
     formState: { errors },
@@ -15,13 +19,31 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
     resetField,
   } = useForm<IInputs>()
 
-  const onSubmit = (data: IInputs) => {
+  const onSubmit = async (values: IInputs) => {
+    const data = await dispatch(
+      fetchRegister({
+        username: values.name,
+        password: values.password,
+        email: values.email,
+      })
+    )
+    if (!data.payload) {
+      return alert('Не удалость зарегистрироваться')
+    }
     console.log(data)
     resetField('name')
     resetField('email')
     resetField('password')
     switchForm()
   }
+
+  // const onSubmit = (data: IInputs) => {
+  //   console.log(data)
+  //   resetField('name')
+  //   resetField('email')
+  //   resetField('password')
+  //   switchForm()
+  // }
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>

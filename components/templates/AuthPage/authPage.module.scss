@@ -123,8 +123,8 @@ $transition: 1.25s;
     background-color: #2d2d2d;
     color: #f2f2f2;
     box-shadow:
-      inset 2px 2px 4px $black,
-      inset -2px -2px 4px $black;
+    inset 2px 2px 4px $black,
+    inset -2px -2px 4px $black;
   }
 
   &__span {
@@ -190,8 +190,8 @@ $transition: 1.25s;
 
   &.dark_mode {
     box-shadow:
-      8px 8px 16px #2d2d2d,
-      -8px -8px 16px $black;
+    8px 8px 16px #2d2d2d,
+    -8px -8px 16px $black;
   }
 
   @media (max-width: 530px) {
@@ -261,8 +261,8 @@ $transition: 1.25s;
   &.dark_mode {
     background-color: #2d2d2d;
     box-shadow:
-      8px 8px 16px $black,
-      -8px -8px 16px $black;
+    8px 8px 16px $black,
+    -8px -8px 16px $black;
   }
 
   @media (max-width: 800px) {
@@ -291,8 +291,8 @@ $transition: 1.25s;
     &.dark_mode {
       background-color: #2d2d2d;
       box-shadow:
-        8px 8px 16px #2d2d2d,
-        -8px -8px 16px $black;
+      8px 8px 16px #2d2d2d,
+      -8px -8px 16px $black;
     }
 
     &__t {
@@ -417,7 +417,6 @@ $transition: 1.25s;
 }
 
 @keyframes is-gx-mobile {
-
   0%,
   10%,
   100% {
@@ -431,7 +430,6 @@ $transition: 1.25s;
 }
 
 @keyframes is-gx-mobile430 {
-
   0%,
   10%,
   100% {
@@ -463,3 +461,4 @@ $transition: 1.25s;
     right: 5px;
   }
 }
+
