@@ -3,6 +3,7 @@ import React, { MutableRefObject } from 'react'
 import styles from './authPage.module.scss'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import SignUpForm from '@/components/modules/AuthPage/SignUpForm'
+import SigInForm from '@/components/modules/AuthPage/SignInForm'
 const AuthPage = () => {
   const switchCtn = React.useRef() as MutableRefObject<HTMLDivElement>
   const switchC1 = React.useRef() as MutableRefObject<HTMLDivElement>
@@ -90,14 +91,15 @@ const AuthPage = () => {
         ref={bContainer}
       >
         <div className={styles.container__inner}>
-          <form className={styles.form}>
+          <SigInForm />
+          {/* <form className={styles.form}>
             <h2 className={`${styles.form__title} ${styles.title}`}>
               Войдите на сайт
             </h2>
             <input
               className={styles.form__input}
               type="text"
-              placeholder="Email"
+              placeholder="Name"
             />
             <input
               className={styles.form__input}
@@ -109,7 +111,7 @@ const AuthPage = () => {
             >
               Войти
             </button>
-          </form>
+          </form> */}
         </div>
       </div>
       <div className={styles.switch} id="switch-cnt" ref={switchCtn}>

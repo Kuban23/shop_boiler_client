@@ -1,26 +1,32 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import axios from '../../app/axiosClient'
-import { ISignUpFx } from '@/types/auth'
+import { ISignIn, ISignUp } from '@/types/auth'
 
-// Делаю асинхронный экшн для залогивания использования- будем делать запрос на БЭК для авторизации
+// Делаю асинхронный экшн для регистрации пользования
 export const fetchRegister = createAsyncThunk(
   'auth/fetchRegister',
-  async ({ username, password, email }: ISignUpFx) => {
-    const res = await axios.post('/users/signup', {
+  async ({ username, password, email }: ISignUp) => {
+    const { data } = await axios.post('/users/signup', {
       username,
       password,
       email,
     })
-    return res.data
+    return data
   }
 )
 
-// type userState = {
-//   username: string
-//   password: string
-//   email: string
-// }
+// Делаю асинхронный экшн для залогивания пользования
+export const fetchLogin = createAsyncThunk(
+  'auth/fetchLogin',
+  async ({ username, password }: ISignIn) => {
+    const { data } = await axios.post('/users/login', {
+      username,
+      password,
+    })
+    return data
+  }
+)
 
 export enum Status {
   LOADING = 'loading',
@@ -30,7 +36,7 @@ export enum Status {
 
 interface authSliceState {
   status: Status
-  data: ISignUpFx | null
+  data: ISignUp | null
 }
 const initialState: authSliceState = {
   data: null, // инф-я о пользователе будет храниться в data
@@ -57,6 +63,19 @@ const authSlice = createSlice({
       state.status = Status.SACCESS
     })
     builder.addCase(fetchRegister.rejected, (state) => {
+      state.status = Status.ERROR
+      state.data = null
+    })
+
+    builder.addCase(fetchLogin.pending, (state) => {
+      state.status = Status.LOADING
+      state.data = null
+    })
+    builder.addCase(fetchLogin.fulfilled, (state, action) => {
+      state.data = action.payload
+      state.status = Status.SACCESS
+    })
+    builder.addCase(fetchLogin.rejected, (state) => {
       state.status = Status.ERROR
       state.data = null
     })

@@ -11,8 +11,13 @@ export interface IAuthPageInput {
   errors: FieldErrors<IInputs>
 }
 
-export interface ISignUpFx {
+export interface ISignUp {
   username: string
   password: string
   email: string
+}
+
+export interface ISignIn {
+  username: string
+  password: string
 }

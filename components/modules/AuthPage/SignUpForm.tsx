@@ -19,31 +19,25 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
     resetField,
   } = useForm<IInputs>()
 
-  const onSubmit = async (values: IInputs) => {
-    const data = await dispatch(
+  const onSubmit = async (data: IInputs) => {
+    const userData = await dispatch(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       fetchRegister({
-        username: values.name,
-        password: values.password,
-        email: values.email,
+        username: data.name,
+        password: data.password,
+        email: data.email,
       })
     )
-    if (!data.payload) {
+    if (!userData.payload) {
       return alert('Не удалость зарегистрироваться')
     }
-    console.log(data)
+    console.log(userData)
     resetField('name')
     resetField('email')
     resetField('password')
     switchForm()
   }
-
-  // const onSubmit = (data: IInputs) => {
-  //   console.log(data)
-  //   resetField('name')
-  //   resetField('email')
-  //   resetField('password')
-  //   switchForm()
-  // }
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
