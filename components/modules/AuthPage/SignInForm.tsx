@@ -7,8 +7,11 @@ import styles from '../../templates/AuthPage/authPage.module.scss'
 import { IInputs } from '@/types/auth'
 import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
 import { fetchLogin } from '@/redux/slices/auth'
+import spinnerStyles from '@/components/modules/AuthPage/spinner/index.module.scss'
 
 const SigInForm = () => {
+  const [spinner, setSpinner] = React.useState(false)
+
   const dispatch = useDispatch()
 
   const {
@@ -19,21 +22,27 @@ const SigInForm = () => {
   } = useForm<IInputs>()
 
   const onSubmit = async (data: IInputs) => {
-    const userData = await dispatch(
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      fetchLogin({
-        username: data.name,
-        password: data.password,
-      })
-    )
-    if (!userData.payload) {
-      return alert('Не удалость зайти на сайт')
+    try {
+      setSpinner(true)
+      const userData = await dispatch(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        fetchLogin({
+          username: data.name,
+          password: data.password,
+        })
+      )
+      if (!userData.payload) {
+        return alert('Не удалость зайти на сайт')
+      }
+      resetField('name')
+      resetField('password')
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setSpinner(false)
     }
-    resetField('name')
-    resetField('password')
   }
-
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <h2 className={`${styles.form__title} ${styles.title}`}>
@@ -50,7 +59,7 @@ const SigInForm = () => {
       <button
         className={`${styles.form__button} ${styles.button} ${styles.submit}`}
       >
-        Войти
+        {spinner ? <div className={spinnerStyles.spinner} /> : 'Войти'}
       </button>
     </form>
   )

@@ -8,8 +8,10 @@ import { IInputs } from '@/types/auth'
 import EmailInput from '@/components/elements/AuthPage/EmailInput'
 import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
 import { fetchRegister } from '@/redux/slices/auth'
+import spinnerStyles from '@/components/modules/AuthPage/spinner/index.module.scss'
 
 const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
+  const [spinner, setSpinner] = React.useState(false)
   const dispatch = useDispatch()
 
   const {
@@ -20,23 +22,30 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
   } = useForm<IInputs>()
 
   const onSubmit = async (data: IInputs) => {
-    const userData = await dispatch(
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      fetchRegister({
-        username: data.name,
-        password: data.password,
-        email: data.email,
-      })
-    )
-    if (!userData.payload) {
-      return alert('Не удалость зарегистрироваться')
+    try {
+      setSpinner(true)
+      const userData = await dispatch(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        fetchRegister({
+          username: data.name,
+          password: data.password,
+          email: data.email,
+        })
+      )
+      if (!userData.payload) {
+        return alert('Не удалость зарегистрироваться')
+      }
+      console.log(userData)
+      resetField('name')
+      resetField('email')
+      resetField('password')
+      switchForm()
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setSpinner(false)
     }
-    console.log(userData)
-    resetField('name')
-    resetField('email')
-    resetField('password')
-    switchForm()
   }
 
   return (
@@ -57,7 +66,11 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
       <button
         className={`${styles.form__button} ${styles.button} ${styles.submit}`}
       >
-        Зарегистрироваться
+        {spinner ? (
+          <div className={spinnerStyles.spinner} />
+        ) : (
+          'Зарегистрироваться'
+        )}
       </button>
     </form>
   )
