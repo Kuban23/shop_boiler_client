@@ -9,6 +9,8 @@ import EmailInput from '@/components/elements/AuthPage/EmailInput'
 import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
 import { fetchRegister } from '@/redux/slices/auth'
 import spinnerStyles from '@/components/modules/AuthPage/spinner/index.module.scss'
+import { toast } from 'react-toastify'
+import { showAuthError } from '@/utils/errors'
 
 const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
   const [spinner, setSpinner] = React.useState(false)
@@ -34,15 +36,18 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
         })
       )
       if (!userData.payload) {
-        return alert('Не удалость зарегистрироваться')
+        toast('Не удалость зарегистрироваться')
+        // return alert('Не удалость зарегистрироваться')
       }
+      toast(userData.payload.warningMessage)
       console.log(userData)
       resetField('name')
       resetField('email')
       resetField('password')
       switchForm()
     } catch (error) {
-      console.log(error)
+      //console.log(error)
+      showAuthError(error)
     } finally {
       setSpinner(false)
     }

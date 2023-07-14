@@ -9,6 +9,7 @@ import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
 import { fetchLogin } from '@/redux/slices/auth'
 import spinnerStyles from '@/components/modules/AuthPage/spinner/index.module.scss'
 import { showAuthError } from '@/utils/errors'
+import { toast } from 'react-toastify'
 
 const SigInForm = () => {
   const [spinner, setSpinner] = React.useState(false)
@@ -34,8 +35,11 @@ const SigInForm = () => {
         })
       )
       if (!userData.payload) {
-        return alert('Неверное имя пользователя или пароль')
+        toast('Неверное имя пользователя или пароль')
+        // return alert('Неверное имя пользователя или пароль')
       }
+      toast(userData.payload.warningMessage)
+      console.log(userData)
       resetField('name')
       resetField('password')
     } catch (error) {
