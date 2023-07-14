@@ -8,6 +8,7 @@ import { IInputs } from '@/types/auth'
 import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
 import { fetchLogin } from '@/redux/slices/auth'
 import spinnerStyles from '@/components/modules/AuthPage/spinner/index.module.scss'
+import { showAuthError } from '@/utils/errors'
 
 const SigInForm = () => {
   const [spinner, setSpinner] = React.useState(false)
@@ -33,11 +34,12 @@ const SigInForm = () => {
         })
       )
       if (!userData.payload) {
-        return alert('Не удалость зайти на сайт')
+        return alert('Неверное имя пользователя или пароль')
       }
       resetField('name')
       resetField('password')
     } catch (error) {
+      showAuthError(error)
       console.log(error)
     } finally {
       setSpinner(false)
