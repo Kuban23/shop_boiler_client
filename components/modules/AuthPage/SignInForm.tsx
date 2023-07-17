@@ -34,6 +34,10 @@ const SigInForm = () => {
           password: data.password,
         })
       )
+      if (userData.payload) {
+        toast('Вход успешно выполнен')
+        // return alert('Неверное имя пользователя или пароль')
+      }
       if (!userData.payload) {
         toast('Неверное имя пользователя или пароль')
         // return alert('Неверное имя пользователя или пароль')
