@@ -1,9 +1,11 @@
 import React, { MutableRefObject } from 'react'
+import { useSelector } from 'react-redux'
 
 import styles from './authPage.module.scss'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import SignUpForm from '@/components/modules/AuthPage/SignUpForm'
 import SigInForm from '@/components/modules/AuthPage/SignInForm'
+import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
 const AuthPage = () => {
   const switchCtn = React.useRef() as MutableRefObject<HTMLDivElement>
   const switchC1 = React.useRef() as MutableRefObject<HTMLDivElement>
@@ -14,22 +16,6 @@ const AuthPage = () => {
   const bContainer = React.useRef() as MutableRefObject<HTMLDivElement>
   // Применил кастомный хук чтобы убрать после 800 текст и описание
   const isMedia800 = useMediaQuery(800)
-
-  // const switchCtn: MutableRefObject<HTMLDivElement> = React.useRef()
-  // // let switchCtn = useRef() as MutableRefObject<HTMLDivElement>
-  // const switchC1: MutableRefObject<HTMLDivElement> = React.useRef()
-  // // const switchC1 = document.querySelector('#switch-c1')
-  // const switchC2: MutableRefObject<HTMLDivElement> = React.useRef()
-  // // const switchC2 = document.querySelector('#switch-c2')
-  // const switchCircle1: MutableRefObject<HTMLDivElement> = React.useRef()
-  // const switchCircle2: MutableRefObject<HTMLDivElement> = React.useRef()
-  // // const switchCircle = document.querySelectorAll('.switch__circle')
-  // const switchBtn: MutableRefObject<HTMLDivElement> = React.useRef()
-  // // const switchBtn = document.querySelectorAll('.switch-btn')
-  // const aContainer: MutableRefObject<HTMLDivElement> = React.useRef()
-  // // const aContainer = document.querySelector('#a-container')
-  // const bContainer: MutableRefObject<HTMLDivElement> = React.useRef()
-  // // const bContainer = document.querySelector('#b-container')
 
   // console.log(switchC2)
   const switchForm = () => {
@@ -49,85 +35,58 @@ const AuthPage = () => {
     bContainer.current.classList.toggle(styles.is_z200)
   }
 
+  //ig
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const mode = useSelector((state: any) => state.theme)
+  // делаю условие по теме и применю стили
+  const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
+
   return (
-    <div className={styles.main}>
+    <div className={`${styles.main} ${darkModeClass}`}>
+      <div className="styles.mode_toggle">
+        <ModeToggler />
+      </div>
       <div
-        className={`${styles.container} ${styles.a_container}`}
+        className={`${styles.container} ${styles.a_container} ${darkModeClass}`}
         id="a-container"
         ref={aContainer}
       >
         <div className={styles.container__inner}>
           <SignUpForm switchForm={switchForm} />
-          {/* <form className={styles.form}>
-            <h2 className={`${styles.form__title} ${styles.title}`}>
-              Создать аккаунт
-            </h2>
-            <input
-              className={styles.form__input}
-              type="text"
-              placeholder="Name"
-            />
-            <input
-              className={styles.form__input}
-              type="text"
-              placeholder="Email"
-            />
-            <input
-              className={styles.form__input}
-              type="password"
-              placeholder="Password"
-            />
-            <button
-              className={`${styles.form__button} ${styles.button} ${styles.submit}`}
-            >
-              Зарегистрироваться
-            </button>
-          </form> */}
         </div>
       </div>
       <div
-        className={`${styles.container} ${styles.b_container}`}
+        className={`${styles.container} ${styles.b_container} ${darkModeClass}`}
         id="b-container"
         ref={bContainer}
       >
         <div className={styles.container__inner}>
           <SigInForm />
-          {/* <form className={styles.form}>
-            <h2 className={`${styles.form__title} ${styles.title}`}>
-              Войдите на сайт
-            </h2>
-            <input
-              className={styles.form__input}
-              type="text"
-              placeholder="Name"
-            />
-            <input
-              className={styles.form__input}
-              type="password"
-              placeholder="Password"
-            />
-            <button
-              className={`${styles.form__button} ${styles.button} ${styles.submit}`}
-            >
-              Войти
-            </button>
-          </form> */}
         </div>
       </div>
-      <div className={styles.switch} id="switch-cnt" ref={switchCtn}>
-        <div className={styles.switch__circle} ref={switchCircle1} />
+      <div
+        className={`${styles.switch} ${darkModeClass}`}
+        id="switch-cnt"
+        ref={switchCtn}
+      >
         <div
-          className={`${styles.switch__circle} ${styles.switch__circle__t}`}
+          className={`${styles.switch__circle} ${darkModeClass}`}
+          ref={switchCircle1}
+        />
+        <div
+          className={`${styles.switch__circle} ${styles.switch__circle__t} ${darkModeClass}`}
           ref={switchCircle2}
         />
         <div className={styles.switch__container} id="switch-c1" ref={switchC1}>
           {!isMedia800 && (
             <>
-              <h2 className={`${styles.switch__title} ${styles.title}`}>
+              <h2
+                className={`${styles.switch__title} ${styles.title} ${darkModeClass}`}
+              >
                 Добро пожаловать!
               </h2>
               <p
-                className={`${styles.switch__description} ${styles.description}`}
+                className={`${styles.switch__description} ${styles.description} ${darkModeClass}`}
               >
                 Чтобы оставаться на связи с нами, пожалуйста, войдите под своей
                 личной информацией
@@ -148,11 +107,13 @@ const AuthPage = () => {
         >
           {!isMedia800 && (
             <>
-              <h2 className={`${styles.switch__title} ${styles.title}`}>
+              <h2
+                className={`${styles.switch__title} ${styles.title} ${darkModeClass}`}
+              >
                 Привет!
               </h2>
               <p
-                className={`${styles.switch__description} ${styles.description}`}
+                className={`${styles.switch__description} ${styles.description} ${darkModeClass}`}
               >
                 Введите свои личные данные
               </p>
@@ -160,7 +121,7 @@ const AuthPage = () => {
           )}
           <button
             onClick={switchForm}
-            className={`${styles.switch__button} ${styles.button} ${styles.switch_btn}`}
+            className={`${styles.switch__button} ${styles.button} ${styles.switch_btn} ${darkModeClass}`}
           >
             Зарегистрироваться
           </button>
