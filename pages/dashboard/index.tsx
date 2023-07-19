@@ -1,8 +1,8 @@
 import Head from 'next/head'
 
-import AuthPage from '@/components/templates/AuthPage/AuthPage'
+import Header from '@/components/modules/Header/Header'
 
-const Auth = () => {
+const Dashboard = () => {
   console.log()
   return (
     <>
@@ -18,9 +18,10 @@ const Auth = () => {
           href="/images/logo.svg"
         />
       </Head>
-      <AuthPage />
+      <Header />
+      <h1>Dashboard</h1>
     </>
   )
 }
 
-export default Auth
+export default Dashboard

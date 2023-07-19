@@ -95,7 +95,7 @@ const AuthPage = () => {
           )}
           <button
             onClick={switchForm}
-            className={`${styles.switch__button} ${styles.button} ${styles.switch_btn}`}
+            className={`${styles.switch__button} ${styles.button} ${styles.switch_btn} ${darkModeClass}`}
           >
             Войти
           </button>
