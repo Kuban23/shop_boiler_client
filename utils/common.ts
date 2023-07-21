@@ -1,12 +1,9 @@
-// import { IWrappedComponentProps } from '@/types/common'
-// import React, { ForwardRefExoticComponent, MutableRefObject, RefAttributes } from 'react'
+export const getWindowWidth = () => {
+  const { innerWidth: windowWidth } =
+    typeof window !== 'undefined' ? window : { innerWidth: 0 }
 
-// export const getWindowWidth = () => {
-//   const { innerWidth: windowWidth } =
-//     typeof window !== 'undefined' ? window : { innerWidth: 0 }
-
-//   return { windowWidth }
-// }
+  return { windowWidth }
+}
 
 // // Функция для клика по аватарке расположенной в hader
 // export function withClickOutside(
