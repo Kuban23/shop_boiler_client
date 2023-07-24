@@ -6,6 +6,7 @@ import styles from './header.module.scss'
 import SearchSvg from '@/components/elements/SearchSvg/SearchSvg'
 import SearchInput from '@/components/elements/Header/SearchInput/SearchInput'
 import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
+import CartPopup from './CartPopup/CartPopup'
 
 const HeaderBottom = () => {
   //ig
@@ -20,7 +21,7 @@ const HeaderBottom = () => {
         <h1 className={styles.header__logo}>
           <Link href="/dashboard" legacyBehavior passHref>
             <a className={styles.header__logo__link}>
-              <img src="../../public/images/logo.svg" alt="logo" />
+              <img src="/images/logo.svg" alt="logo" />
               <span
                 className={`${styles.header__logo__link__text} ${darkModeClass}`}
               >
@@ -31,15 +32,16 @@ const HeaderBottom = () => {
         </h1>
         <div className={styles.header__search}>
           <SearchInput />
-          <button>
-            <span>
+          <button className={`${styles.header__searcht__btn} ${darkModeClass}`}>
+            <span className={styles.header__searcht__btn__span}>
               <SearchSvg />
             </span>
           </button>
         </div>
-        <div>
+        <div className={styles.header__shopping_cart}>
           <ModeToggler />
-          <button>Корзина</button>
+          <CartPopup />
+          {/* <button>Корзина</button> */}
         </div>
       </div>
     </div>
