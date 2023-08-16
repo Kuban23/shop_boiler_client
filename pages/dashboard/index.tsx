@@ -19,7 +19,10 @@ const Dashboard = () => {
         />
       </Head>
       <Header />
-      <h1>Dashboard</h1>
+      <main>
+        <div className="overlay" />
+        <h1>Dashboard</h1>
+      </main>
     </>
   )
 }

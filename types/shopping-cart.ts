@@ -1,5 +1,4 @@
 export interface IShoppingCartItem {
-  [x: string]: any
   id: number
   name: string
   price: number

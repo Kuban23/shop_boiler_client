@@ -7,8 +7,12 @@ import CityButton from '@/components/elements/CityButton/CityButton'
 import ProfileDropdown from './ProfileDropdown/ProfileDropdown'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
+import { usePopup } from '@/hooks/usePoup'
 
 const HeaderTop = () => {
+  //получаю доступ к переменным из своего хука
+  const { toggleOpen, open, closePopup } = usePopup()
+
   //    <ModeToggler /> будет переходить в бургер меню, для это заюзаю хук useMediaQuery
   const isMedia950 = useMediaQuery(950)
   //ig
@@ -21,17 +25,29 @@ const HeaderTop = () => {
       <div className={`container ${styles.header__top__container}`}>
         {!isMedia950 && <CityButton />}
         {isMedia950 && (
-          <button className={`${styles.burger_menu} ${darkModeClass}`}>
+          <button
+            className={`${styles.burger_menu} ${darkModeClass} ${
+              open ? styles.open : ''
+            }`}
+            onClick={toggleOpen}
+          >
             <span />
             <span />
             <span />
           </button>
         )}
-        <nav className={styles.header__nav}>
+        <nav
+          className={`${styles.header__nav} ${
+            open ? styles.open : ''
+          } ${darkModeClass}`}
+        >
           <ul className={styles.header__nav__list}>
             <li className={styles.header__nav__list__item}>
               <Link href="/shipping-payment" passHref legacyBehavior>
-                <a className={styles.header__nav__list__item__link}>
+                <a
+                  className={`${styles.header__nav__list__item__link} ${darkModeClass}`}
+                  onClick={closePopup}
+                >
                   Доставка и оплата
                 </a>
               </Link>
@@ -39,7 +55,10 @@ const HeaderTop = () => {
 
             <li className={styles.header__nav__list__item}>
               <Link href="/about" passHref legacyBehavior>
-                <a className={`${styles.header__nav__list__item__link}`}>
+                <a
+                  className={`${styles.header__nav__list__item__link} ${darkModeClass}`}
+                  onClick={closePopup}
+                >
                   О компании
                 </a>
               </Link>
@@ -47,7 +66,10 @@ const HeaderTop = () => {
 
             <li className={styles.header__nav__list__item}>
               <Link href="/catalog" passHref legacyBehavior>
-                <a className={`${styles.header__nav__list__item__link}`}>
+                <a
+                  className={`${styles.header__nav__list__item__link} ${darkModeClass}`}
+                  onClick={closePopup}
+                >
                   Каталог
                 </a>
               </Link>
@@ -55,7 +77,10 @@ const HeaderTop = () => {
 
             <li className={styles.header__nav__list__item}>
               <Link href="/contacts" passHref legacyBehavior>
-                <a className={`${styles.header__nav__list__item__link}`}>
+                <a
+                  className={`${styles.header__nav__list__item__link} ${darkModeClass}`}
+                  onClick={closePopup}
+                >
                   Контакты
                 </a>
               </Link>
@@ -63,7 +88,10 @@ const HeaderTop = () => {
 
             <li className={styles.header__nav__list__item}>
               <Link href="/wholesale-buyers" passHref legacyBehavior>
-                <a className={`${styles.header__nav__list__item__link}`}>
+                <a
+                  className={`${styles.header__nav__list__item__link} ${darkModeClass}`}
+                  onClick={closePopup}
+                >
                   Оптовым покупателям
                 </a>
               </Link>
