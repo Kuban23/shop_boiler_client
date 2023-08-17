@@ -1,6 +1,7 @@
 import Head from 'next/head'
 
 import Header from '@/components/modules/Header/Header'
+import Footer from '@/components/modules/Footer/Footer'
 
 const Dashboard = () => {
   console.log()
@@ -23,6 +24,7 @@ const Dashboard = () => {
         <div className="overlay" />
         <h1>Dashboard</h1>
       </main>
+      <Footer />
     </>
   )
 }
