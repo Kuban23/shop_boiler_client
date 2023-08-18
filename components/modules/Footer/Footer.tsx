@@ -8,26 +8,55 @@ import CompanyContent from './CompanyContent'
 import MarkerSvg from '@/components/elements/MarkerSvg/MarkerSvg'
 import PhoneSvg from '@/components/elements/PhoneSvg/PhoneSvg'
 import MailSvg from '@/components/elements/MailSvg/MailSvg'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
+import Accordion from '@/components/elements/Accordion/Accordion'
 
 const Footer = () => {
-  console.log()
+  const isMedia750 = useMediaQuery(750)
+  const isMedia500 = useMediaQuery(500)
   return (
     <footer className={styles.footer}>
       <div className={styles.footer__container}>
         <div className={styles.footer__top}>
-          <FooterLogo />
+          {!isMedia750 && <FooterLogo />}
           <div className={styles.footer__top__inner}>
             <div className={styles.footer__top__item}>
-              <h3 className={styles.footer__top__item__title}>
-                Интернет-магазин
-              </h3>
-              <OnlineStoreContent />
-              <div style={{ height: 17 }} />
+              {!isMedia500 && (
+                <>
+                  <h3 className={styles.footer__top__item__title}>
+                    Интернет-магазин
+                  </h3>
+                  <OnlineStoreContent />
+                </>
+              )}
+              {isMedia500 && (
+                <Accordion
+                  title="Интернет-магазин"
+                  titleClass={styles.footer__top__item__title}
+                  arrowOpenClass={styles.open}
+                >
+                  <OnlineStoreContent />
+                  <div style={{ height: 17 }} />
+                </Accordion>
+              )}
             </div>
             <div className={styles.footer__top__item}>
-              <h3 className={styles.footer__top__item__title}>Компания</h3>
-              <CompanyContent />
-              <div style={{ height: 17 }} />
+              {!isMedia500 && (
+                <>
+                  <h3 className={styles.footer__top__item__title}>Компания</h3>
+                  <CompanyContent />
+                </>
+              )}
+              {isMedia500 && (
+                <Accordion
+                  title="Компания"
+                  titleClass={styles.footer__top__item__title}
+                  arrowOpenClass={styles.open}
+                >
+                  <CompanyContent />
+                  <div style={{ height: 17 }} />
+                </Accordion>
+              )}
             </div>
           </div>
           <div className={styles.footer__top__item}>
@@ -126,6 +155,7 @@ const Footer = () => {
               </ul>
             </div>
           </div>
+          {isMedia750 && <FooterLogo />}
           <div className={styles.footer__bottom__block}>
             <p className={styles.footer__bottom__block__copyright}>
               © «Магазин газовых котлов и запчастей».

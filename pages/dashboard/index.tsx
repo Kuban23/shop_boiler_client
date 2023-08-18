@@ -1,7 +1,6 @@
 import Head from 'next/head'
 
-import Header from '@/components/modules/Header/Header'
-import Footer from '@/components/modules/Footer/Footer'
+import Layout from '@/components/layout/Layout'
 
 const Dashboard = () => {
   console.log()
@@ -19,12 +18,13 @@ const Dashboard = () => {
           href="/images/logo.svg"
         />
       </Head>
-      <Header />
-      <main>
-        <div className="overlay" />
-        <h1>Dashboard</h1>
-      </main>
-      <Footer />
+
+      <Layout>
+        <main>
+          <div className="overlay" />
+          <h1>Dashboard</h1>
+        </main>
+      </Layout>
     </>
   )
 }
