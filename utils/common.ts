@@ -5,6 +5,10 @@ export const getWindowWidth = () => {
   return { windowWidth }
 }
 
+// Функция для форматрования цены
+export const formatPrice = (x: number) =>
+  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+
 // // Функция для клика по аватарке расположенной в hader
 // export function withClickOutside(
 //   WrappedComponent: ForwardRefExoticComponent<
