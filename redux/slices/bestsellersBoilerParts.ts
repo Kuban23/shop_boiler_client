@@ -7,10 +7,6 @@ export const getBestsellersParts = createAsyncThunk(
   'parts/getBestsellersOrNewParts',
   async () => {
     const { data } = await axios.get('/boiler-parts/bestsellers', {})
-    // async (params: IBoilerPart) => {
-    //   const { data } = await axios.get('/boiler-parts/bestsellers', {
-    //     params,
-    //   })
     return data
   }
 )

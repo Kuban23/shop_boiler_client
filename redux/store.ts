@@ -4,7 +4,8 @@ import { useDispatch } from 'react-redux'
 import authSliceReducer from './slices/auth'
 import themeReducer from './slices/modeTheme'
 import shoppingCartReducer from './slices/shopping-cart'
-import bestsellersReducer from './slices/boilerParts'
+import bestsellersReducer from './slices/bestsellersBoilerParts'
+import newPartsReducer from './slices/newBoilerParts'
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     theme: themeReducer,
     cart: shoppingCartReducer,
     bestsellers: bestsellersReducer,
+    newParts: newPartsReducer,
   },
 })
 

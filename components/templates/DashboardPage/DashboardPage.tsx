@@ -3,10 +3,12 @@ import React from 'react'
 import styles from './dashboardPage.module.scss'
 import BrandsSlider from '@/components/modules/DashboardPage/BrandsSlider'
 // import { IBoilerParts } from '@/types/boilerparts'
-import { useDispatch, useSelector } from 'react-redux'
-import { getBestsellersParts } from '@/redux/slices/boilerParts'
+import { useSelector } from 'react-redux'
+import { getBestsellersParts } from '@/redux/slices/bestsellersBoilerParts'
 import DashboardSlider from '@/components/modules/DashboardPage/DashboardSlider'
 import { IBoilerParts } from '@/types/boilerparts'
+import { getNewParts } from '@/redux/slices/newBoilerParts'
+import { useAppDispatch } from '@/redux/store'
 
 const DashboardPage = () => {
   //ig
@@ -28,13 +30,16 @@ const DashboardPage = () => {
     (state: IBoilerParts) => state.bestsellers.items
   )
 
-  console.log(bestsellersParts)
-  const dispatch = useDispatch()
+  const newParts = useSelector((state: IBoilerParts) => state.newParts.items)
+
+  const dispatch = useAppDispatch()
+  // const dispatch = useDispatch()
 
   const loadBoilerParts = async () => {
     try {
       setSkeleton(true)
       dispatch(getBestsellersParts())
+      dispatch(getNewParts())
       // const bestsellers = await getBestsellersOrNewPartsFx(
       //   '/boiler-parts/bestsellers'
       // )
@@ -66,6 +71,12 @@ const DashboardPage = () => {
             items={bestsellersParts.rows || []}
             skeleton={skeleton}
           />
+        </div>
+        <div className={styles.dashboard__parts}>
+          <h3 className={`${styles.dashboard__parts__title} ${darkModeClass}`}>
+            Новинки
+          </h3>
+          <DashboardSlider items={newParts.rows || []} skeleton={skeleton} />
         </div>
       </div>
     </section>
