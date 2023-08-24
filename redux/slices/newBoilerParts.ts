@@ -41,11 +41,11 @@ export const newPartsSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(getNewParts.pending, (state) => {
-      state.status = Status.LOADING // отображаем загрузку
-      state.items = [] // очищаем чтобы не хранились старые пиццы
+      state.status = Status.LOADING
+      state.items = []
     })
     builder.addCase(getNewParts.fulfilled, (state, action) => {
-      state.items = action.payload // выводим запрашиваемые пиццы
+      state.items = action.payload
       state.status = Status.SACCESS
     })
     builder.addCase(getNewParts.rejected, (state) => {
