@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import axios from '../../app/axiosClient'
 import { ISignIn, ISignUp } from '@/types/auth'
+// import { AxiosRequestConfig } from 'axios'
 
 // Делаю асинхронный экшн для регистрации пользования
 export const fetchRegister = createAsyncThunk(
@@ -27,6 +28,26 @@ export const fetchLogin = createAsyncThunk(
     return data
   }
 )
+
+// Делаю асинхронный экшн для проверки пользвателя
+export const checkUserAuth = createAsyncThunk(
+  'auth/checkUserAuth',
+  async () => {
+    const { data } = await axios.get('/users/login-check')
+    return data
+  }
+)
+// export const checkUserAuth = createAsyncThunk(
+//   'auth/checkUserAuth',
+//   async ({ userId, username, email }: ILoginCheck) => {
+//     const { data } = await axios.get('/users/login-check', {
+//       userId,
+//       username,
+//       email,
+//     } as AxiosRequestConfig<{ userId: number; username: string; password: string }>)
+//     return data
+//   }
+// )
 
 export enum Status {
   LOADING = 'loading',
@@ -54,6 +75,7 @@ const authSlice = createSlice({
 
   // Для того чтобы запрос проходил используем extraReducers
   extraReducers: (builder) => {
+    // запрос на регистрацию
     builder.addCase(fetchRegister.pending, (state) => {
       state.status = Status.LOADING
       state.data = null
@@ -67,6 +89,7 @@ const authSlice = createSlice({
       state.data = null
     })
 
+    // Запрос на логин
     builder.addCase(fetchLogin.pending, (state) => {
       state.status = Status.LOADING
       state.data = null
@@ -79,21 +102,21 @@ const authSlice = createSlice({
       state.status = Status.ERROR
       state.data = null
     })
+
+    // для проверки пользвателя
+    builder.addCase(checkUserAuth.pending, (state) => {
+      state.status = Status.LOADING
+      state.data = null
+    })
+    builder.addCase(checkUserAuth.fulfilled, (state, action) => {
+      state.data = action.payload
+      state.status = Status.SACCESS
+    })
+    builder.addCase(checkUserAuth.rejected, (state) => {
+      state.status = Status.ERROR
+      state.data = null
+    })
   },
-  // extraReducers: {
-  //   [fetchAuth.pending]: (state) => {
-  //     state.status = 'loading'
-  //     state.data = null
-  //   },
-  //   [fetchAuth.fulfilled]: (state, action) => {
-  //     state.status = 'success'
-  //     state.data = action.payload
-  //   },
-  //   [fetchAuth.rejected]: (state) => {
-  //     state.status = 'error'
-  //     state.data = null
-  //   },
-  // },
 })
 
 export default authSlice.reducer

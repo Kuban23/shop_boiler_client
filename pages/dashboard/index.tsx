@@ -2,13 +2,14 @@ import Head from 'next/head'
 
 import Layout from '@/components/layout/Layout'
 import DashboardPage from '@/components/templates/DashboardPage/DashboardPage'
+import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 
 const Dashboard = () => {
-  console.log()
+  const { shouldLoadContent } = useRedirectByUserCheck()
   return (
     <>
       <Head>
-        <title>Магазин котлов</title>
+        <title>Магазин котлов | {shouldLoadContent ? 'Главная' : ''}</title>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,13 +20,20 @@ const Dashboard = () => {
           href="/images/logo.svg"
         />
       </Head>
-
-      <Layout>
+      {shouldLoadContent && (
+        <Layout>
+          <main>
+            <div className="overlay" />
+            <DashboardPage />
+          </main>
+        </Layout>
+      )}
+      {/* <Layout>
         <main>
           <div className="overlay" />
           <DashboardPage />
         </main>
-      </Layout>
+      </Layout> */}
     </>
   )
 }

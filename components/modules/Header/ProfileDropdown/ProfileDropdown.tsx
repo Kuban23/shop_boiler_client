@@ -13,6 +13,11 @@ const ProfileDropdown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
     //ig
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mode = useSelector((state: any) => state.theme)
+    // состояние пользователя
+    //ig
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const user = useSelector((state: any) => state.user)
+    console.log(user)
     // делаю условие по теме и применю стили
     const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
@@ -38,12 +43,12 @@ const ProfileDropdown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
                 <span
                   className={`${styles.profile__dropdown__username} ${darkModeClass}`}
                 >
-                  Ира
+                  {user.username}
                 </span>
                 <span
                   className={`${styles.profile__dropdown__email} ${darkModeClass}`}
                 >
-                  ira@gmail.com
+                  {user.email}
                 </span>
               </li>
               <li className={styles.profile__dropdown__item}>

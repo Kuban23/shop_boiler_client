@@ -11,6 +11,7 @@ import { fetchLogin } from '@/redux/slices/auth'
 import spinnerStyles from '@/components/modules/AuthPage/spinner/index.module.scss'
 import { showAuthError } from '@/utils/errors'
 import { toast } from 'react-toastify'
+
 const SigInForm = () => {
   const [spinner, setSpinner] = React.useState(false)
 
