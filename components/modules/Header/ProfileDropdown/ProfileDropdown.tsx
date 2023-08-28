@@ -1,13 +1,14 @@
 import ProfileSvg from '@/components/elements/ProfileSvg/ProfileSvg'
 import React, { forwardRef } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { AnimatePresence, motion } from 'framer-motion'
+import router from 'next/router'
 
 import styles from './profileDropdown.module.scss'
 import LogoutSvg from '@/components/elements/CityButton/LogoutSvg/LogoutSvg'
 import { IWrappedComponentProps } from '@/types/common'
 import { withClickOutside } from '@/utils/withClickOutside'
-
+import { userLogout } from '@/redux/slices/auth'
 const ProfileDropdown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
   ({ open, setOpen }, ref) => {
     //ig
@@ -22,6 +23,13 @@ const ProfileDropdown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
     const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
     const toggleProfileDropDown = () => setOpen(!open)
+
+    const dispatch = useDispatch()
+
+    const handleLogout = async () => {
+      await dispatch(userLogout())
+      router.push('/')
+    }
 
     return (
       <div className={styles.profile} ref={ref}>
@@ -52,7 +60,10 @@ const ProfileDropdown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
                 </span>
               </li>
               <li className={styles.profile__dropdown__item}>
-                <button className={styles.profile__dropdown__item__btn}>
+                <button
+                  className={styles.profile__dropdown__item__btn}
+                  onClick={handleLogout}
+                >
                   <span
                     className={`${styles.profile__dropdown__item__text} ${darkModeClass}`}
                   >

@@ -1,14 +1,15 @@
 import Head from 'next/head'
 
 import AuthPage from '@/components/templates/AuthPage/AuthPage'
-import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
+//import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 
 const Auth = () => {
-  const { shouldLoadContent } = useRedirectByUserCheck(true)
+  //const { shouldLoadContent } = useRedirectByUserCheck(true)
+  console.log()
   return (
     <>
       <Head>
-        <title>Магазин котлов | {shouldLoadContent ? 'Авторизация' : ''}</title>
+        <title>Магазин котлов</title>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,8 +20,8 @@ const Auth = () => {
           href="/images/logo.svg"
         />
       </Head>
-      {shouldLoadContent && <AuthPage />}
-      {/* <AuthPage /> */}
+      {/* {shouldLoadContent && <AuthPage />} */}
+      <AuthPage />
     </>
   )
 }

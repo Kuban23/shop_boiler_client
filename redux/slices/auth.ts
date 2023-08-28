@@ -37,17 +37,11 @@ export const checkUserAuth = createAsyncThunk(
     return data
   }
 )
-// export const checkUserAuth = createAsyncThunk(
-//   'auth/checkUserAuth',
-//   async ({ userId, username, email }: ILoginCheck) => {
-//     const { data } = await axios.get('/users/login-check', {
-//       userId,
-//       username,
-//       email,
-//     } as AxiosRequestConfig<{ userId: number; username: string; password: string }>)
-//     return data
-//   }
-// )
+
+// Делаю асинхронный экшн для выхода пользвателя
+export const userLogout = createAsyncThunk('auth/userLogout', async () => {
+  await axios.get('/users/login-check')
+})
 
 export enum Status {
   LOADING = 'loading',
@@ -113,6 +107,20 @@ const authSlice = createSlice({
       state.status = Status.SACCESS
     })
     builder.addCase(checkUserAuth.rejected, (state) => {
+      state.status = Status.ERROR
+      state.data = null
+    })
+
+    // для выхода пользвателя
+    builder.addCase(userLogout.pending, (state) => {
+      state.status = Status.LOADING
+      state.data = null
+    })
+    // builder.addCase(userLogout.fulfilled, (state, action) => {
+    //   state.data = action.payload
+    //   state.status = Status.SACCESS
+    // })
+    builder.addCase(userLogout.rejected, (state) => {
       state.status = Status.ERROR
       state.data = null
     })

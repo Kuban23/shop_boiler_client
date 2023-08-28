@@ -6,7 +6,7 @@ interface UserSliceState {
 }
 
 const initialState: UserSliceState = {
-  user: {} as IUser, // инф-я о пользователе будет храниться в data
+  user: {} as IUser,
 }
 
 export const userSlice = createSlice({
