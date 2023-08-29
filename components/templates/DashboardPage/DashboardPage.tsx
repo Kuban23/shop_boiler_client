@@ -1,4 +1,5 @@
 import React from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import styles from './dashboardPage.module.scss'
 import BrandsSlider from '@/components/modules/DashboardPage/BrandsSlider'
@@ -9,8 +10,14 @@ import DashboardSlider from '@/components/modules/DashboardPage/DashboardSlider'
 import { IBoilerParts } from '@/types/boilerparts'
 import { getNewParts } from '@/redux/slices/newBoilerParts'
 import { useAppDispatch } from '@/redux/store'
+import CartAlert from '@/components/modules/DashboardPage/CartAlert'
 
 const DashboardPage = () => {
+  //Состояние элементов корзины
+  const shoppingCart = useSelector((state: any) => state.cart)
+  // Состояние при котором будет показываться алерт корзины
+  const [showAlert, setShowAlert] = React.useState(!!shoppingCart.length)
+
   //ig
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mode = useSelector((state: any) => state.theme)
@@ -40,13 +47,6 @@ const DashboardPage = () => {
       setSkeleton(true)
       dispatch(getBestsellersParts())
       dispatch(getNewParts())
-      // const bestsellers = await getBestsellersOrNewPartsFx(
-      //   '/boiler-parts/bestsellers'
-      // )
-      // const newParts = await getBestsellersOrNewPartsFx('/boiler-parts/new')
-
-      // setBestsellers(bestsellers)
-      // setNewParts(newParts)
     } catch (error) {
       // toast.error((error as Error).message)
     } finally {
@@ -54,9 +54,24 @@ const DashboardPage = () => {
     }
   }
 
+  // Функция которую буду передавать в CartAlert
+  const closeAlert = () => setShowAlert(false)
+
   return (
     <section className={styles.dashboard}>
       <div className={`container ${styles.dashboard__container}`}>
+        <AnimatePresence>
+          {showAlert && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className={`${styles.dashboard__alert} ${darkModeClass}`}
+            >
+              <CartAlert count={shoppingCart.length} closeAlert={closeAlert} />
+            </motion.div>
+          )}
+        </AnimatePresence>
         <div className={styles.dashboard__brands}>
           <BrandsSlider />
         </div>
