@@ -5,6 +5,7 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import NextNProgress from 'nextjs-progressbar'
 
 export default function App({ Component, pageProps }: AppProps) {
   const [mounted, setMounted] = React.useState(false)
@@ -15,6 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     mounted && (
       <>
+        <NextNProgress />
         <Provider store={store}>
           <Component {...pageProps} />
           <ToastContainer

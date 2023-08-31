@@ -9,6 +9,12 @@ export const getWindowWidth = () => {
 export const formatPrice = (x: number) =>
   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
 
+// Функция для использования FilterSelect для сортировки товаров по цене (сначала дешевые)
+export const createSelectOption = (value: string | number) => ({
+  value,
+  label: value,
+})
+
 // // Функция для клика по аватарке расположенной в hader
 // export function withClickOutside(
 //   WrappedComponent: ForwardRefExoticComponent<
