@@ -2,11 +2,20 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from '../../app/axiosClient'
 import { IBoilerPart } from '@/types/boilerparts'
 
-// Делаю асинхронный экшн для запроса товара
+// Делаю асинхронный экшн для запроса товара-новинок
 export const getNewParts = createAsyncThunk(
   'parts/getBestsellersOrNewParts',
   async () => {
     const { data } = await axios.get('/boiler-parts/new')
+    return data
+  }
+)
+
+// Делаю асинхронный экшн для запроса товара
+export const getBoilerParts = createAsyncThunk(
+  'parts/getBoilerParts',
+  async () => {
+    const { data } = await axios.get('/boiler-parts?limit=20&offset=0')
     return data
   }
 )
@@ -37,8 +46,12 @@ export const newPartsSlice = createSlice({
     getNew: (state, action: PayloadAction<IBoilerPart[]>) => {
       state.items = action.payload
     },
+    setBoilerParts: (state, action: PayloadAction<IBoilerPart[]>) => {
+      state.items = action.payload
+    },
   },
 
+  // запрос товара-новинок
   extraReducers: (builder) => {
     builder.addCase(getNewParts.pending, (state) => {
       state.status = Status.LOADING
@@ -52,8 +65,21 @@ export const newPartsSlice = createSlice({
       state.status = Status.ERROR
       state.items = []
     })
+
+    builder.addCase(getBoilerParts.pending, (state) => {
+      state.status = Status.LOADING
+      state.items = []
+    })
+    builder.addCase(getBoilerParts.fulfilled, (state, action) => {
+      state.items = action.payload
+      state.status = Status.SACCESS
+    })
+    builder.addCase(getBoilerParts.rejected, (state) => {
+      state.status = Status.ERROR
+      state.items = []
+    })
   },
 })
 
-export const { getNew } = newPartsSlice.actions
+export const { getNew, setBoilerParts } = newPartsSlice.actions
 export default newPartsSlice.reducer
