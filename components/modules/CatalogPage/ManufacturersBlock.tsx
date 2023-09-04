@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { motion } from 'framer-motion'
 
-import styles from '../../templates/CatalogPage/catalog.module.scss'
+import styles from '../../templates/CatalogPage/catalogPage.module.scss'
 import { IManufacturersBlockProps } from '@/types/catalog'
 
 const ManufacturersBlock = ({ title }: IManufacturersBlockProps) => {

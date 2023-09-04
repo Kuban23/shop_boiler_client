@@ -3,12 +3,13 @@ import { useSelector } from 'react-redux'
 import { AnimatePresence } from 'framer-motion'
 import { useAppDispatch } from '@/redux/store'
 
-import styles from './catalog.module.scss'
+import styles from './catalogPage.module.scss'
 import ManufacturersBlock from '@/components/modules/CatalogPage/ManufacturersBlock'
 import FilterSelect from '@/components/modules/CatalogPage/FilterSelect'
 import { getBoilerParts, setBoilerParts } from '@/redux/slices/newBoilerParts'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
 import { IBoilerParts } from '@/types/boilerparts'
+import CatalogItem from '@/components/modules/CatalogPage/CatalogItem'
 
 const CatalogPage = () => {
   const [skeleton, setSkeleton] = React.useState(false)
@@ -41,7 +42,7 @@ const CatalogPage = () => {
     loadBoilerParts()
   }, [])
 
-  console.log(boilerParts)
+  // console.log(boilerParts)
 
   return (
     <section className={styles.catalog}>
@@ -59,6 +60,7 @@ const CatalogPage = () => {
           <div className={styles.catalog__top__inner}>
             <button
               className={`${styles.catalog__top__reset} ${darkModeClass}`}
+              disabled={true}
             >
               Сбросить фильтр
             </button>
@@ -70,9 +72,9 @@ const CatalogPage = () => {
             <div className="">Фильтры</div>
             {skeleton ? (
               <ul className={skeletonStyles.skeleton}>
-                {Array.from(new Array(8)).map((item) => (
+                {Array.from(new Array(8)).map((_, i) => (
                   <li
-                    key={item}
+                    key={i}
                     className={`${skeletonStyles.skeleton__item} ${
                       mode === 'dark' ? `${skeletonStyles.dark_mode}` : ''
                     }`}
@@ -84,7 +86,9 @@ const CatalogPage = () => {
             ) : (
               <ul className={styles.catalog__list}>
                 {boilerParts.rows?.length ? (
-                  boilerParts.rows.map((item) => <li key={item.id} />)
+                  boilerParts.rows.map((item) => (
+                    <CatalogItem item={item} key={item.id} />
+                  ))
                 ) : (
                   <span>Список товаров пуст...</span>
                 )}

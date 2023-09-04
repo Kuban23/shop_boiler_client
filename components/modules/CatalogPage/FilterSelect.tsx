@@ -23,11 +23,9 @@ const FilterSelect = () => {
 
   // функция которя будет сетить каждую опцию
   const handleSearchOptionChange = (selectedOption: SelectOptionType) => {
-    if (!selectedOption) {
-      setCategoryOption(selectedOption)
-      return
-    }
+    setCategoryOption(selectedOption)
   }
+
   return (
     <Select
       placeholder="Я ищу..."
