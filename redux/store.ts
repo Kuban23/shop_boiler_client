@@ -7,6 +7,7 @@ import shoppingCartReducer from './slices/shopping-cart'
 import bestsellersReducer from './slices/bestsellersBoilerParts'
 import newPartsReducer from './slices/newBoilerParts'
 import userReducer from './slices/user'
+import filterPartsReducer from './slices/boilerParts'
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     bestsellers: bestsellersReducer,
     newParts: newPartsReducer,
     user: userReducer,
+    filterParts: filterPartsReducer,
   },
 })
 

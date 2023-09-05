@@ -49,6 +49,7 @@ export const newPartsSlice = createSlice({
     setBoilerParts: (state, action: PayloadAction<IBoilerPart[]>) => {
       state.items = action.payload
     },
+    setBoilerPartsCheapFirst: (state) => {},
   },
 
   // запрос товара-новинок
