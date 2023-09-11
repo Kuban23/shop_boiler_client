@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { AnimatePresence } from 'framer-motion'
 import { useAppDispatch } from '@/redux/store'
+import ReactPaginate from 'react-paginate'
 
 import styles from './catalogPage.module.scss'
 import ManufacturersBlock from '@/components/modules/CatalogPage/ManufacturersBlock'
@@ -95,6 +96,19 @@ const CatalogPage = () => {
               </ul>
             )}
           </div>
+          <ReactPaginate
+            containerClassName={styles.catalog__bottom__list}
+            pageClassName={styles.catalog__bottom__list__item}
+            pageLinkClassName={styles.catalog__bottom__list__item__link}
+            previousClassName={styles.catalog__bottom__list__prev}
+            nextClassName={styles.catalog__bottom__list__next}
+            breakClassName={styles.catalog__bottom__list__break}
+            breakLinkClassName={`${styles.catalog__bottom__list__break__link} ${darkModeClass}`}
+            breakLabel="..."
+            pageCount={boilerParts.count / 20}
+            forcePage={1}
+            // onPageChange={}
+          />
         </div>
       </div>
     </section>
