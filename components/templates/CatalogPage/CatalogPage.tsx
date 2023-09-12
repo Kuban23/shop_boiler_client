@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { AnimatePresence } from 'framer-motion'
 import { useAppDispatch } from '@/redux/store'
 import ReactPaginate from 'react-paginate'
+import { useRouter } from 'next/router'
 
 import styles from './catalogPage.module.scss'
 import ManufacturersBlock from '@/components/modules/CatalogPage/ManufacturersBlock'
@@ -11,9 +12,19 @@ import { getBoilerParts, setBoilerParts } from '@/redux/slices/newBoilerParts'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
 import { IBoilerParts } from '@/types/boilerparts'
 import CatalogItem from '@/components/modules/CatalogPage/CatalogItem'
+import { IQueryParams } from '@/types/catalog'
 
-const CatalogPage = () => {
+const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const [skeleton, setSkeleton] = React.useState(false)
+
+  const isValidOffset =
+    query.offset && !isNaN(+query.offset) && +query.offset > 0
+
+  // состояние которое опирается на queryпараметры, буду передавать current page в forcePage
+  // таким образом при перезагрузке отрисовывать нужную страницу с элементами
+  const [currentPage, setCurrentPage] = React.useState(
+    isValidOffset ? +query.offset - 1 : 0
+  )
 
   //ig
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,13 +35,48 @@ const CatalogPage = () => {
   const boilerParts = useSelector((state: IBoilerParts) => state.newParts.items)
 
   const dispatch = useAppDispatch()
+  const router = useRouter()
 
   // функция по получанию  товара с сервера
   const loadBoilerParts = async () => {
     try {
       setSkeleton(true)
       const data = await dispatch(getBoilerParts())
-      setBoilerParts(data)
+      if (!isValidOffset) {
+        router.replace({
+          query: {
+            offset: 1,
+          },
+        })
+        resetPagination(data)
+        return
+      }
+      if (isValidOffset) {
+        if (+query.offset > Math.ceil(data.count / 20)) {
+          router.push(
+            {
+              query: {
+                ...query,
+                offset: 1,
+              },
+            },
+            undefined,
+            { shallow: true }
+          )
+          setCurrentPage(0)
+          setBoilerParts(data)
+          return
+        }
+        // const offset = +query.offset - 1
+        // const result = await dispatch(getBoilerParts())
+        // setCurrentPage(offset)
+      }
+      const offset = +query.offset - 1
+      // const result = await getBoilerPartsFx(
+      //   `/boiler-parts?limit=20&offset=${offset}`)
+      const result = await dispatch(getBoilerParts())
+      setCurrentPage(offset)
+      setBoilerParts(result)
     } catch (error) {
       // toast.error((error as Error).message)
     } finally {
@@ -41,9 +87,47 @@ const CatalogPage = () => {
   // эффект который при загрузке каталога подгружать товары
   React.useEffect(() => {
     loadBoilerParts()
+    console.log(boilerParts.rows)
   }, [])
 
   // console.log(boilerParts)
+
+  // логика определения кол-ва страниц
+  const pagesCount = Math.ceil(boilerParts.count / 20)
+
+  const resetPagination = (data: IBoilerParts) => {
+    setCurrentPage(0)
+    setBoilerParts(data)
+  }
+
+  //Функция для клика пагинации
+  const handlePageChange = async ({ selected }: { selected: number }) => {
+    try {
+      const data = await dispatch(getBoilerParts())
+      if (selected > pagesCount) {
+        resetPagination(data)
+        return
+      }
+      if (isValidOffset && +query.offset > Math.ceil(data.count / 2)) {
+        resetPagination(data)
+        return
+      }
+      // const result = await getBoilerPartsFx(
+      //   `/boiler-parts?limit=20&offset=${selected}
+      router.push(
+        {
+          query: {
+            ...router.query,
+            offset: selected + 1,
+          },
+        },
+        undefined,
+        { shallow: true }
+      )
+      setCurrentPage(selected)
+      setBoilerParts(result)
+    } catch (error) {}
+  }
 
   return (
     <section className={styles.catalog}>
@@ -105,9 +189,9 @@ const CatalogPage = () => {
             breakClassName={styles.catalog__bottom__list__break}
             breakLinkClassName={`${styles.catalog__bottom__list__break__link} ${darkModeClass}`}
             breakLabel="..."
-            pageCount={boilerParts.count / 20}
-            forcePage={1}
-            // onPageChange={}
+            pageCount={pagesCount}
+            forcePage={currentPage}
+            onPageChange={handlePageChange}
           />
         </div>
       </div>

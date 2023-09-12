@@ -1,12 +1,13 @@
 import Head from 'next/head'
 import Layout from '@/components/layout/Layout'
 import CatalogPage from '@/components/templates/CatalogPage/CatalogPage'
+import { IQueryParams } from '@/types/catalog'
 
-function Catalog() {
+function Catalog({ query }: { query: IQueryParams }) {
   return (
     <>
       <Head>
-        <title>Аква Тепмикс</title>
+        <title>Аква Тепломикс</title>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,12 +15,18 @@ function Catalog() {
       </Head>
       <Layout>
         <main>
-          <CatalogPage />
+          <CatalogPage query={query} />
           <div className="overlay" />
         </main>
       </Layout>
     </>
   )
+}
+
+export async function getServerSideProps(context: { query: IQueryParams }) {
+  return {
+    props: { query: { ...context.query } },
+  }
 }
 
 export default Catalog

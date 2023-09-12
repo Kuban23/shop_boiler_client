@@ -109,3 +109,8 @@ body::-webkit-scrollbar-thumb:hover {
 .slick-track {
   padding-top: 8px;
 }
+
+.selected a {
+  background-color: #1C629E;
+  color: #f2f2f2;
+}
