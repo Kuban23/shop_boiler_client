@@ -15,6 +15,7 @@ export interface IBoilerPart {
 }
 
 export interface IBoilerParts {
+  newParts: any
   count: number
   rows: IBoilerPart[]
 }

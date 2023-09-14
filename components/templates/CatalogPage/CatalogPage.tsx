@@ -8,7 +8,12 @@ import { useRouter } from 'next/router'
 import styles from './catalogPage.module.scss'
 import ManufacturersBlock from '@/components/modules/CatalogPage/ManufacturersBlock'
 import FilterSelect from '@/components/modules/CatalogPage/FilterSelect'
-import { getBoilerParts, setBoilerParts } from '@/redux/slices/newBoilerParts'
+import {
+  getBoilerParts,
+  getHandlePaginationPage,
+  getHandleSelectedPage,
+  setBoilerParts,
+} from '@/redux/slices/newBoilerParts'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
 import { IBoilerParts } from '@/types/boilerparts'
 import CatalogItem from '@/components/modules/CatalogPage/CatalogItem'
@@ -67,14 +72,11 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
           setBoilerParts(data)
           return
         }
-        // const offset = +query.offset - 1
-        // const result = await dispatch(getBoilerParts())
-        // setCurrentPage(offset)
       }
       const offset = +query.offset - 1
       // const result = await getBoilerPartsFx(
       //   `/boiler-parts?limit=20&offset=${offset}`)
-      const result = await dispatch(getBoilerParts())
+      const result = await dispatch(getHandlePaginationPage())
       setCurrentPage(offset)
       setBoilerParts(result)
     } catch (error) {
@@ -114,6 +116,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
       }
       // const result = await getBoilerPartsFx(
       //   `/boiler-parts?limit=20&offset=${selected}
+      const result = await dispatch(getHandleSelectedPage())
       router.push(
         {
           query: {
