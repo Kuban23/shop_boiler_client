@@ -11,6 +11,7 @@ import { fetchRegister } from '@/redux/slices/auth'
 import spinnerStyles from '@/components/modules/AuthPage/spinner/index.module.scss'
 import { toast } from 'react-toastify'
 import { showAuthError } from '@/utils/errors'
+import { singUp } from '@/context/api/auth'
 
 const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
   const [spinner, setSpinner] = React.useState(false)
@@ -26,27 +27,23 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
   const onSubmit = async (data: IInputs) => {
     try {
       setSpinner(true)
-      const userData = await dispatch(
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        fetchRegister({
-          username: data.name,
-          password: data.password,
-          email: data.email,
-        })
-      )
-      if (!userData.payload) {
-        toast('Не удалость зарегистрироваться')
-        // return alert('Не удалость зарегистрироваться')
-      }
-      toast(userData.payload.warningMessage)
+      //делаю запрос на сервер
+      const userData = await singUp({
+        url: '/users/signup',
+        username: data.name,
+        password: data.password,
+        email: data.email,
+      })
       console.log(userData)
-      resetField('name')
+      if (!userData) {
+        return
+      }
+
       resetField('email')
+      resetField('name')
       resetField('password')
       switchForm()
     } catch (error) {
-      //console.log(error)
       showAuthError(error)
     } finally {
       setSpinner(false)

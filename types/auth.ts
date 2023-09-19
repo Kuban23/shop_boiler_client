@@ -15,6 +15,7 @@ export interface ISignUp {
   username: string
   password: string
   email: string
+  url: string
 }
 
 export interface ISignIn {
