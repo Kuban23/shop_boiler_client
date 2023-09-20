@@ -1,6 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
+import { useStore } from 'effector-react'
 import { useRouter } from 'next/router'
 
 import NameInput from '@/components/elements/AuthPage/NameInput'
@@ -10,6 +10,7 @@ import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
 import spinnerStyles from '@/components/modules/AuthPage/spinner/index.module.scss'
 import { showAuthError } from '@/utils/errors'
 import { singIn } from '@/context/api/auth'
+import { $mode } from '@/context/mode'
 
 const SigInForm = () => {
   const [spinner, setSpinner] = React.useState(false)
@@ -21,10 +22,7 @@ const SigInForm = () => {
     resetField,
   } = useForm<IInputs>()
 
-  //ig
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
-  // делаю условие по теме и применю стили
+  const mode = useStore($mode)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const route = useRouter()

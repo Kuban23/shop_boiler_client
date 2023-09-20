@@ -1,31 +1,35 @@
-import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React from 'react'
+import { useStore } from 'effector-react'
+//import { useSelector, useDispatch } from 'react-redux'
 
-import { setMode } from '../redux/slices/modeTheme'
+import { setMode, $mode } from '../context/mode'
+// import { setMode } from '../redux/slices/modeTheme'
 
 export const useTheme = () => {
+  // достаю стор-состояние
+  const mode = useStore($mode)
+
   //ig
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
-  const dispatch = useDispatch()
+  // const mode = useSelector((state: any) => state.theme)
+  // const dispatch = useDispatch()
 
+  // Функция для смены темы
   const toggleTheme = () => {
     if (mode === 'dark') {
       localStorage.setItem('mode', JSON.stringify('light'))
-      dispatch(setMode('light'))
+      setMode('light')
     } else {
       localStorage.setItem('mode', JSON.stringify('dark'))
-      dispatch(setMode('dark'))
+      setMode('dark')
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     const localTheme = JSON.parse(localStorage.getItem('mode') as string)
-
     if (localTheme) {
-      dispatch(setMode(localTheme))
+      setMode(localTheme)
     }
   }, [])
-
   return { toggleTheme }
 }

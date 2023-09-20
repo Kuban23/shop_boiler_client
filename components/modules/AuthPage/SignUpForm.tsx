@@ -1,6 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
+import { useStore } from 'effector-react'
 
 import NameInput from '@/components/elements/AuthPage/NameInput'
 import styles from '../../templates/AuthPage/authPage.module.scss'
@@ -11,6 +11,7 @@ import spinnerStyles from '@/components/modules/AuthPage/spinner/index.module.sc
 // import { toast } from 'react-toastify'
 import { showAuthError } from '@/utils/errors'
 import { singUp } from '@/context/api/auth'
+import { $mode } from '@/context/mode'
 
 const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
   const [spinner, setSpinner] = React.useState(false)
@@ -47,10 +48,7 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
     }
   }
 
-  //ig
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
-  // делаю условие по теме и применю стили
+  const mode = useStore($mode)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   return (

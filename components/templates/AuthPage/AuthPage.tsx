@@ -1,11 +1,13 @@
 import React, { MutableRefObject } from 'react'
-import { useSelector } from 'react-redux'
+import { useStore } from 'effector-react'
 
 import styles from './authPage.module.scss'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import SignUpForm from '@/components/modules/AuthPage/SignUpForm'
 import SigInForm from '@/components/modules/AuthPage/SignInForm'
 import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
+import { $mode } from '@/context/mode'
+
 const AuthPage = () => {
   const switchCtn = React.useRef() as MutableRefObject<HTMLDivElement>
   const switchC1 = React.useRef() as MutableRefObject<HTMLDivElement>
@@ -35,11 +37,13 @@ const AuthPage = () => {
     bContainer.current.classList.toggle(styles.is_z200)
   }
 
+  const mode = useStore($mode)
+  const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   //ig
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
+  //const mode = useSelector((state: any) => state.theme)
   // делаю условие по теме и применю стили
-  const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
+  // const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   return (
     <div className={`${styles.main} ${darkModeClass}`}>

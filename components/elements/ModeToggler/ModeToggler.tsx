@@ -1,20 +1,23 @@
-import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import React from 'react'
+import { useStore } from 'effector-react'
+
 import { useTheme } from '../../../hooks/useTheme'
 import styles from './index.module.scss'
+import { $mode } from '../../../context/mode'
 
 const ModeToggler = () => {
+  // получаю доступ к функции toggleTheme из хука useTheme
   const { toggleTheme } = useTheme()
-  //ig
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
+
+  // достаю стор-состояние
+  const mode = useStore($mode)
 
   const handleToggleMode = () => {
     toggleTheme()
     document.body.classList.toggle('dark_mode')
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     document.body.classList.add(mode === 'dark' ? 'dark_mode' : 'body')
   }, [mode])
 
