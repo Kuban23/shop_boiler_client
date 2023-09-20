@@ -1,21 +1,19 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import NameInput from '@/components/elements/AuthPage/NameInput'
 import styles from '../../templates/AuthPage/authPage.module.scss'
 import { IInputs } from '@/types/auth'
 import EmailInput from '@/components/elements/AuthPage/EmailInput'
 import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
-import { fetchRegister } from '@/redux/slices/auth'
 import spinnerStyles from '@/components/modules/AuthPage/spinner/index.module.scss'
-import { toast } from 'react-toastify'
+// import { toast } from 'react-toastify'
 import { showAuthError } from '@/utils/errors'
 import { singUp } from '@/context/api/auth'
 
 const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
   const [spinner, setSpinner] = React.useState(false)
-  const dispatch = useDispatch()
 
   const {
     register,
@@ -34,11 +32,10 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
         password: data.password,
         email: data.email,
       })
-      console.log(userData)
+      // Если не юзер, то сбразваю запрос и анимация с входом не работает
       if (!userData) {
         return
       }
-
       resetField('email')
       resetField('name')
       resetField('password')

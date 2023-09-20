@@ -11,6 +11,5 @@ export const showAuthError = (error: unknown) => {
       return
     }
   }
-
   toast.error((error as Error).message)
 }

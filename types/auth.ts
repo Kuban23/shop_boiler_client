@@ -21,6 +21,7 @@ export interface ISignUp {
 export interface ISignIn {
   username: string
   password: string
+  url: string
 }
 
 export interface IUser {

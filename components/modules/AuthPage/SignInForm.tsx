@@ -1,21 +1,18 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 
 import NameInput from '@/components/elements/AuthPage/NameInput'
 import styles from '../../templates/AuthPage/authPage.module.scss'
 import { IInputs } from '@/types/auth'
 import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
-import { fetchLogin } from '@/redux/slices/auth'
 import spinnerStyles from '@/components/modules/AuthPage/spinner/index.module.scss'
 import { showAuthError } from '@/utils/errors'
-import { toast } from 'react-toastify'
+import { singIn } from '@/context/api/auth'
 
 const SigInForm = () => {
   const [spinner, setSpinner] = React.useState(false)
-
-  const dispatch = useDispatch()
 
   const {
     register,
@@ -35,30 +32,17 @@ const SigInForm = () => {
   const onSubmit = async (data: IInputs) => {
     try {
       setSpinner(true)
-      const userData = await dispatch(
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        fetchLogin({
-          username: data.name,
-          password: data.password,
-        })
-      )
-      if (userData.payload) {
-        toast('Вход успешно выполнен')
-        // return alert('Неверное имя пользователя или пароль')
-      }
-      if (!userData.payload) {
-        toast('Неверное имя пользователя или пароль')
-        // return alert('Неверное имя пользователя или пароль')
-      }
-      toast(userData.payload.warningMessage)
-      console.log(userData)
+      await singIn({
+        url: '/users/login',
+        username: data.name,
+        password: data.password,
+      })
+
       resetField('name')
       resetField('password')
       route.push('/dashboard')
     } catch (error) {
       showAuthError(error)
-      console.log(error)
     } finally {
       setSpinner(false)
     }
