@@ -1,14 +1,13 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useStore } from 'effector-react'
 import Select from 'react-select'
 
 import { SelectOptionType } from '@/types/common'
 import { inputStyles, controlStyles, menuStyles, optionStyles } from '.'
+import { $mode } from '@/context/mode'
 
 const SearchInput = () => {
-  //ig
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
+  const mode = useStore($mode)
 
   // состояние выподающего списка инпута-поиска
   const [searchOption, setSearchOption] = React.useState<SelectOptionType>(null)

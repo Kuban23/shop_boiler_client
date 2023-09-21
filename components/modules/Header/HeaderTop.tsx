@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { useSelector } from 'react-redux'
+import { useStore } from 'effector-react'
 
 import styles from './header.module.scss'
 import CityButton from '@/components/elements/CityButton/CityButton'
@@ -8,18 +8,18 @@ import ProfileDropdown from './ProfileDropdown/ProfileDropdown'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
 import { usePopup } from '@/hooks/usePoup'
+import { $mode } from '@/context/mode'
 
 const HeaderTop = () => {
-  //получаю доступ к переменным из своего хука
+  //получаю доступ к переменным из своего хука usePopup
   const { toggleOpen, open, closePopup } = usePopup()
 
   //    <ModeToggler /> будет переходить в бургер меню, для это заюзаю хук useMediaQuery
   const isMedia950 = useMediaQuery(950)
-  //ig
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
+  const mode = useStore($mode)
   // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
+
   return (
     <div className={styles.header__top}>
       <div className={`container ${styles.header__top__container}`}>

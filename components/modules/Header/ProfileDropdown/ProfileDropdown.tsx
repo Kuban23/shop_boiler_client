@@ -3,17 +3,18 @@ import React, { forwardRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnimatePresence, motion } from 'framer-motion'
 import router from 'next/router'
+import { useStore } from 'effector-react'
 
 import styles from './profileDropdown.module.scss'
 import LogoutSvg from '@/components/elements/CityButton/LogoutSvg/LogoutSvg'
 import { IWrappedComponentProps } from '@/types/common'
 import { withClickOutside } from '@/utils/withClickOutside'
 import { userLogout } from '@/redux/slices/auth'
+import { $mode } from '@/context/mode'
+
 const ProfileDropdown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
   ({ open, setOpen }, ref) => {
-    //ig
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mode = useSelector((state: any) => state.theme)
+    const mode = useStore($mode)
     // состояние пользователя
     //ig
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

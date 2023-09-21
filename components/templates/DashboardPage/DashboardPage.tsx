@@ -1,5 +1,6 @@
 import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useStore } from 'effector-react'
 
 import styles from './dashboardPage.module.scss'
 import BrandsSlider from '@/components/modules/DashboardPage/BrandsSlider'
@@ -11,6 +12,7 @@ import { IBoilerParts } from '@/types/boilerparts'
 import { getNewParts } from '@/redux/slices/newBoilerParts'
 import { useAppDispatch } from '@/redux/store'
 import CartAlert from '@/components/modules/DashboardPage/CartAlert'
+import { $mode } from '@/context/mode'
 
 const DashboardPage = () => {
   //Состояние элементов корзины
@@ -18,9 +20,10 @@ const DashboardPage = () => {
   // Состояние при котором будет показываться алерт корзины
   const [showAlert, setShowAlert] = React.useState(!!shoppingCart.length)
 
+  const mode = useStore($mode)
   //ig
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
+  //const mode = useSelector((state: any) => state.theme)
   // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   // Состояние новинок и бестселлеров получаю с сервера

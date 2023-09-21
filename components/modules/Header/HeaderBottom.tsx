@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useStore } from 'effector-react'
 import Link from 'next/link'
 
 import styles from './header.module.scss'
@@ -8,13 +8,12 @@ import SearchInput from '@/components/elements/Header/SearchInput/SearchInput'
 import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
 import CartPopup from './CartPopup/CartPopup'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { $mode } from '@/context/mode'
 
 const HeaderBottom = () => {
   //    <ModeToggler /> будет переходить в бургер меню, для это заюзаю хук useMediaQuery
   const isMedia950 = useMediaQuery(950)
-  //ig
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
+  const mode = useStore($mode)
   // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 

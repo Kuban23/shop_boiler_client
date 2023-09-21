@@ -38,12 +38,8 @@ const AuthPage = () => {
   }
 
   const mode = useStore($mode)
-  const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
-  //ig
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //const mode = useSelector((state: any) => state.theme)
   // делаю условие по теме и применю стили
-  // const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
+  const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   return (
     <div className={`${styles.main} ${darkModeClass}`}>

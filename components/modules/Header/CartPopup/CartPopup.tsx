@@ -1,22 +1,26 @@
 import React, { forwardRef } from 'react'
-import { useSelector } from 'react-redux'
+//import { useSelector } from 'react-redux'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
+import { useStore } from 'effector-react'
 
 import styles from './CartPopup.module.scss'
 import { IWrappedComponentProps } from '@/types/common'
 import { withClickOutside } from '@/utils/withClickOutside'
 import ShoppingCartSvg from '@/components/elements/ShoppingCartSvg/ShoppingCartSvg'
-import { IShoppingCartItem } from '@/types/shopping-cart'
+//import { IShoppingCartItem } from '@/types/shopping-cart'
+import { $mode } from '@/context/mode'
+import { $shoppingCart } from '@/context/shopping-cart'
 
 const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
   ({ open, setOpen }, ref) => {
-    //ig
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mode = useSelector((state: any) => state.theme)
-    const shoppingCart = useSelector((state: IShoppingCartItem) => state.cart)
+    // получаю длступ к стору
+    const mode = useStore($mode)
+    const shoppingCart = useStore($shoppingCart)
     // делаю условие по теме и применю стили
     const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
+
+    //const shoppingCart = useSelector((state: IShoppingCartItem) => state.cart)
 
     const toggleCartDropDown = () => setOpen(!open)
 
