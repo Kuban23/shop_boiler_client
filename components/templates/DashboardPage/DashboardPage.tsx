@@ -1,18 +1,16 @@
 import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useStore } from 'effector-react'
+import { toast } from 'react-toastify'
 
 import styles from './dashboardPage.module.scss'
 import BrandsSlider from '@/components/modules/DashboardPage/BrandsSlider'
-// import { IBoilerParts } from '@/types/boilerparts'
 import { useSelector } from 'react-redux'
-import { getBestsellersParts } from '@/redux/slices/bestsellersBoilerParts'
 import DashboardSlider from '@/components/modules/DashboardPage/DashboardSlider'
-import { IBoilerParts } from '@/types/boilerparts'
-import { getNewParts } from '@/redux/slices/newBoilerParts'
-import { useAppDispatch } from '@/redux/store'
+import { IBoilerPart, IBoilerParts } from '@/types/boilerparts'
 import CartAlert from '@/components/modules/DashboardPage/CartAlert'
 import { $mode } from '@/context/mode'
+import { getBestsellersOrNewParts } from '@/context/api/boilerParts'
 
 const DashboardPage = () => {
   //Состояние элементов корзины
@@ -21,14 +19,14 @@ const DashboardPage = () => {
   const [showAlert, setShowAlert] = React.useState(!!shoppingCart.length)
 
   const mode = useStore($mode)
-  //ig
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //const mode = useSelector((state: any) => state.theme)
-  // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   // Состояние новинок и бестселлеров получаю с сервера
-  // const [newParts, setNewParts] = React.useState<IBoilerPart[]>([])
-  // const [bestsellers, setBestsellers] = React.useState<IBoilerPart[]>([])
+  const [newParts, setNewParts] = React.useState<IBoilerParts>(
+    {} as IBoilerParts
+  )
+  const [bestsellers, setBestsellers] = React.useState<IBoilerParts>(
+    {} as IBoilerParts
+  )
 
   const [skeleton, setSkeleton] = React.useState(false)
 
@@ -36,22 +34,18 @@ const DashboardPage = () => {
     loadBoilerParts()
   }, [])
 
-  const bestsellersParts = useSelector(
-    (state: IBoilerParts) => state.bestsellers.items
-  )
-
-  const newParts = useSelector((state: IBoilerParts) => state.newParts.items)
-
-  const dispatch = useAppDispatch()
-  // const dispatch = useDispatch()
-
+  // запрашиваю товар на сервере
   const loadBoilerParts = async () => {
     try {
       setSkeleton(true)
-      dispatch(getBestsellersParts())
-      dispatch(getNewParts())
+      const newParts = await getBestsellersOrNewParts('/boiler-parts/new')
+      const bestsellers = await getBestsellersOrNewParts(
+        '/boiler-parts/bestsellers'
+      )
+      setNewParts(newParts)
+      setBestsellers(bestsellers)
     } catch (error) {
-      // toast.error((error as Error).message)
+      toast.error((error as Error).message)
     } finally {
       setSkeleton(false)
     }
@@ -85,10 +79,7 @@ const DashboardPage = () => {
           <h3 className={`${styles.dashboard__parts__title} ${darkModeClass}`}>
             Хиты продаж
           </h3>
-          <DashboardSlider
-            items={bestsellersParts.rows || []}
-            skeleton={skeleton}
-          />
+          <DashboardSlider items={bestsellers.rows || []} skeleton={skeleton} />
         </div>
         <div className={styles.dashboard__parts}>
           <h3 className={`${styles.dashboard__parts__title} ${darkModeClass}`}>

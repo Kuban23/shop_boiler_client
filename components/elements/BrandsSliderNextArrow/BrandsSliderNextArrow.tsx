@@ -2,7 +2,7 @@
 import { IBrandsSliderArrow } from '@/types/elements'
 
 import styles from '../../../components/templates/DashboardPage/dashboardPage.module.scss'
-import BrandSliderArrowSvg from '../BrandsSliderArrow/BrandsSliderArrow'
+import BrandSliderArrowSvg from '../BrandsSliderArrow/BrandsSliderArrowSvg'
 
 const BrandsSliderNextArrow = (props: IBrandsSliderArrow) => (
   <button

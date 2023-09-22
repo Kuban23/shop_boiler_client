@@ -1,22 +1,21 @@
 import { IDashboardSlider } from '@/types/dashboard'
 import React from 'react'
 import Slider from 'react-slick'
+import { useStore } from 'effector-react'
 
 import styles from '../../templates/DashboardPage/dashboardPage.module.scss'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { useSelector } from 'react-redux'
 import Link from 'next/link'
 import { formatPrice } from '@/utils/common'
+import { $mode } from '@/context/mode'
 
 const DashboardSlider = ({
   items,
   skeleton,
   goToPartPage,
 }: IDashboardSlider) => {
-  //ig
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
+  const mode = useStore($mode)
   // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
