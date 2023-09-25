@@ -10,6 +10,7 @@ import { IWrappedComponentProps } from '@/types/common'
 import { withClickOutside } from '@/utils/withClickOutside'
 import { $mode } from '@/context/mode'
 import { $user } from '@/context/user'
+import { logOut } from '@/context/api/auth'
 
 const ProfileDropdown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
   ({ open, setOpen }, ref) => {
@@ -22,10 +23,8 @@ const ProfileDropdown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 
     const toggleProfileDropDown = () => setOpen(!open)
 
-    // const dispatch = useDispatch()
-
     const handleLogout = async () => {
-      // await dispatch(userLogout())
+      await logOut('/users/logout')
       router.push('/')
     }
 

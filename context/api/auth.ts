@@ -43,3 +43,12 @@ export const checkUserAuth = createEffect(async (url: string) => {
     toast.error((error as Error).message)
   }
 })
+
+// метод выхода пользователя
+export const logOut = createEffect(async (url: string) => {
+  try {
+    await api.get(url)
+  } catch (error) {
+    toast.error((error as Error).message)
+  }
+})
