@@ -1,6 +1,5 @@
 import ProfileSvg from '@/components/elements/ProfileSvg/ProfileSvg'
 import React, { forwardRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { AnimatePresence, motion } from 'framer-motion'
 import router from 'next/router'
 import { useStore } from 'effector-react'
@@ -9,26 +8,24 @@ import styles from './profileDropdown.module.scss'
 import LogoutSvg from '@/components/elements/CityButton/LogoutSvg/LogoutSvg'
 import { IWrappedComponentProps } from '@/types/common'
 import { withClickOutside } from '@/utils/withClickOutside'
-import { userLogout } from '@/redux/slices/auth'
 import { $mode } from '@/context/mode'
+import { $user } from '@/context/user'
 
 const ProfileDropdown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
   ({ open, setOpen }, ref) => {
     const mode = useStore($mode)
     // состояние пользователя
-    //ig
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const user = useSelector((state: any) => state.user)
+    const user = useStore($user)
     console.log(user)
     // делаю условие по теме и применю стили
     const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
     const toggleProfileDropDown = () => setOpen(!open)
 
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
 
     const handleLogout = async () => {
-      await dispatch(userLogout())
+      // await dispatch(userLogout())
       router.push('/')
     }
 

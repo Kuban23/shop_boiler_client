@@ -30,15 +30,15 @@ export const fetchLogin = createAsyncThunk(
 )
 
 // Делаю асинхронный экшн для проверки пользвателя
-export const checkUserAuth = createAsyncThunk(
-  'auth/checkUserAuth',
-  async () => {
-    const { data } = await axios.get('/users/login-check')
-    return data
-  }
-)
+// export const checkUserAuth = createAsyncThunk(
+//   'auth/checkUserAuth',
+//   async () => {
+//     const { data } = await axios.get('/users/login-check')
+//     return data
+//   }
+// )
 
-// Делаю асинхронный экшн для выхода пользвателя
+// Делаю асинхронный экшн для выхода пользователя
 export const userLogout = createAsyncThunk('auth/userLogout', async () => {
   await axios.get('/users/login-check')
 })
@@ -98,18 +98,18 @@ const authSlice = createSlice({
     })
 
     // для проверки пользвателя
-    builder.addCase(checkUserAuth.pending, (state) => {
-      state.status = Status.LOADING
-      state.data = null
-    })
-    builder.addCase(checkUserAuth.fulfilled, (state, action) => {
-      state.data = action.payload
-      state.status = Status.SACCESS
-    })
-    builder.addCase(checkUserAuth.rejected, (state) => {
-      state.status = Status.ERROR
-      state.data = null
-    })
+    // builder.addCase(checkUserAuth.pending, (state) => {
+    //   state.status = Status.LOADING
+    //   state.data = null
+    // })
+    // builder.addCase(checkUserAuth.fulfilled, (state, action) => {
+    //   state.data = action.payload
+    //   state.status = Status.SACCESS
+    // })
+    // builder.addCase(checkUserAuth.rejected, (state) => {
+    //   state.status = Status.ERROR
+    //   state.data = null
+    // })
 
     // для выхода пользвателя
     builder.addCase(userLogout.pending, (state) => {

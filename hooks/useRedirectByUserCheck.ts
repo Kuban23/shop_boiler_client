@@ -1,16 +1,13 @@
 import React from 'react'
 
-// import { setUser } from '@/context/user'
 import { useRouter } from 'next/router'
-import { useDispatch } from 'react-redux'
-import { checkUserAuth } from '@/redux/slices/auth'
-import { setUser } from '@/redux/slices/user'
+import { checkUserAuth } from '@/context/api/auth'
+import { setUser } from '@/context/user'
 
 const useRedirectByUserCheck = (isAuthPage = false) => {
   const [shouldLoadContent, setShouldLoadContent] = React.useState(false)
   const router = useRouter()
   const shouldCheckAuth = React.useRef(true)
-  const dispatch = useDispatch()
 
   React.useEffect(() => {
     if (shouldCheckAuth.current) {
@@ -20,7 +17,7 @@ const useRedirectByUserCheck = (isAuthPage = false) => {
   }, [])
 
   const checkUser = async () => {
-    const user = await dispatch(checkUserAuth())
+    const user = await checkUserAuth('/users/login-check')
     console.log(user)
     //проверка- если нахожусь на странице регистрации/логина
     if (isAuthPage) {
