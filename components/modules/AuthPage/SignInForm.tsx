@@ -23,6 +23,7 @@ const SigInForm = () => {
   } = useForm<IInputs>()
 
   const mode = useStore($mode)
+  // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const route = useRouter()

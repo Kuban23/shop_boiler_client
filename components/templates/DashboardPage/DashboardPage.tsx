@@ -5,21 +5,25 @@ import { toast } from 'react-toastify'
 
 import styles from './dashboardPage.module.scss'
 import BrandsSlider from '@/components/modules/DashboardPage/BrandsSlider'
-import { useSelector } from 'react-redux'
 import DashboardSlider from '@/components/modules/DashboardPage/DashboardSlider'
-import { IBoilerPart, IBoilerParts } from '@/types/boilerparts'
+import { IBoilerParts } from '@/types/boilerparts'
 import CartAlert from '@/components/modules/DashboardPage/CartAlert'
 import { $mode } from '@/context/mode'
 import { getBestsellersOrNewParts } from '@/context/api/boilerParts'
+import { $shoppingCart } from '@/context/shopping-cart'
 
 const DashboardPage = () => {
   //Состояние элементов корзины
-  const shoppingCart = useSelector((state: any) => state.cart)
+  const shoppingCart = useStore($shoppingCart)
+
   // Состояние при котором будет показываться алерт корзины
   const [showAlert, setShowAlert] = React.useState(!!shoppingCart.length)
 
   const mode = useStore($mode)
+
+  // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
+
   // Состояние новинок и бестселлеров получаю с сервера
   const [newParts, setNewParts] = React.useState<IBoilerParts>(
     {} as IBoilerParts

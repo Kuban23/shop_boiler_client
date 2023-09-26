@@ -1,15 +1,14 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useStore } from 'effector-react'
 import Link from 'next/link'
 
 import { ICartAlertProps } from '@/types/dashboard'
 import styles from '../../templates/DashboardPage/dashboardPage.module.scss'
 import { formatPrice } from '@/utils/common'
+import { $mode } from '@/context/mode'
 
 const CartAlert = ({ count, closeAlert }: ICartAlertProps) => {
-  //ig
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
+  const mode = useStore($mode)
   // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
