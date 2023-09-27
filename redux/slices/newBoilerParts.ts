@@ -13,13 +13,13 @@ export const getNewParts = createAsyncThunk(
 )
 
 // Делаю асинхронный экшн для запроса товара
-export const getBoilerParts = createAsyncThunk(
-  'parts/getBoilerParts',
-  async () => {
-    const { data } = await axios.get('/boiler-parts?limit=20&offset=0')
-    return data
-  }
-)
+// export const getBoilerParts = createAsyncThunk(
+//   'parts/getBoilerParts',
+//   async () => {
+//     const { data } = await axios.get('/boiler-parts?limit=20&offset=0')
+//     return data
+//   }
+// )
 
 // Делаю асинхронный экшн для запроса товара
 export const getHandlePaginationPage = createAsyncThunk(
@@ -88,18 +88,18 @@ export const newPartsSlice = createSlice({
       state.items = []
     })
     // запрос товара-для каталога
-    builder.addCase(getBoilerParts.pending, (state) => {
-      state.status = Status.LOADING
-      state.items = []
-    })
-    builder.addCase(getBoilerParts.fulfilled, (state, action) => {
-      state.items = action.payload
-      state.status = Status.SACCESS
-    })
-    builder.addCase(getBoilerParts.rejected, (state) => {
-      state.status = Status.ERROR
-      state.items = []
-    })
+    // builder.addCase(getBoilerParts.pending, (state) => {
+    //   state.status = Status.LOADING
+    //   state.items = []
+    // })
+    // builder.addCase(getBoilerParts.fulfilled, (state, action) => {
+    //   state.items = action.payload
+    //   state.status = Status.SACCESS
+    // })
+    // builder.addCase(getBoilerParts.rejected, (state) => {
+    //   state.status = Status.ERROR
+    //   state.items = []
+    // })
     // пагинация
     builder.addCase(getHandlePaginationPage.pending, (state) => {
       state.status = Status.LOADING

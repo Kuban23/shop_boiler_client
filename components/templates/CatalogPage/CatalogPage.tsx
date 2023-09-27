@@ -1,23 +1,20 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { AnimatePresence } from 'framer-motion'
-import { useAppDispatch } from '@/redux/store'
 import ReactPaginate from 'react-paginate'
 import { useRouter } from 'next/router'
+import { useStore } from 'effector-react'
 
 import styles from './catalogPage.module.scss'
 import ManufacturersBlock from '@/components/modules/CatalogPage/ManufacturersBlock'
 import FilterSelect from '@/components/modules/CatalogPage/FilterSelect'
-import {
-  getBoilerParts,
-  getHandlePaginationPage,
-  getHandleSelectedPage,
-  setBoilerParts,
-} from '@/redux/slices/newBoilerParts'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
 import { IBoilerParts } from '@/types/boilerparts'
 import CatalogItem from '@/components/modules/CatalogPage/CatalogItem'
 import { IQueryParams } from '@/types/catalog'
+import { $mode } from '@/context/mode'
+import { getBoilerParts } from '@/context/api/boilerParts'
+import { $boilerParts, setBoilerParts } from '@/context/boilerParts'
+import { toast } from 'react-toastify'
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const [skeleton, setSkeleton] = React.useState(false)
@@ -31,22 +28,18 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     isValidOffset ? +query.offset - 1 : 0
   )
 
-  //ig
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
+  const mode = useStore($mode)
+  const boilerParts = useStore($boilerParts)
   // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
-  const boilerParts = useSelector((state: IBoilerParts) => state.newParts.items)
-
-  const dispatch = useAppDispatch()
   const router = useRouter()
 
-  // функция по получанию  товара с сервера
+  // функция- получаю товары с сервера
   const loadBoilerParts = async () => {
     try {
       setSkeleton(true)
-      const data = await dispatch(getBoilerParts())
+      const data = await getBoilerParts('/boiler-parts?limit=20&offset=0')
       if (!isValidOffset) {
         router.replace({
           query: {
@@ -74,13 +67,13 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
         }
       }
       const offset = +query.offset - 1
-      // const result = await getBoilerPartsFx(
-      //   `/boiler-parts?limit=20&offset=${offset}`)
-      const result = await dispatch(getHandlePaginationPage())
+      const result = await getBoilerParts(
+        `/boiler-parts?limit=20&offset=${offset}`)
+      //const result = await dispatch(getHandlePaginationPage())
       setCurrentPage(offset)
       setBoilerParts(result)
     } catch (error) {
-      // toast.error((error as Error).message)
+      toast.error((error as Error).message)
     } finally {
       setSkeleton(false)
     }
@@ -89,10 +82,9 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   // эффект который при загрузке каталога подгружать товары
   React.useEffect(() => {
     loadBoilerParts()
-    console.log(boilerParts.rows)
   }, [])
 
-  // console.log(boilerParts)
+  console.log(boilerParts)
 
   // логика определения кол-ва страниц
   const pagesCount = Math.ceil(boilerParts.count / 20)

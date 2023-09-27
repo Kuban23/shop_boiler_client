@@ -1,29 +1,29 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react'
-import { useSelector } from 'react-redux'
 import Link from 'next/link'
+import { useStore } from 'effector-react'
 
 import styles from '../../templates/CatalogPage/catalogPage.module.scss'
 import { IBoilerPart } from '@/types/boilerparts'
 import { formatPrice } from '@/utils/common'
 import CartHoverSvg from '@/components/elements/CartHoverSvg/CartHoverSvg'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
+import { $mode } from '@/context/mode'
+import { $shoppingCart } from '@/context/shopping-cart'
+import CartHoverCheckedSvg from '@/components/elements/CartHoverCheckedSvg/CartHoverCheckedSvg'
 
 const CatalogItem = ({ item }: { item: IBoilerPart }) => {
-  const [skeleton, setSkeleton] = React.useState(false)
+  const [skeleton] = React.useState(false)
+
+  const mode = useStore($mode)
   //Состояние элементов корзины
-  const shoppingCart = useSelector((state: any) => state.cart)
+  const shoppingCart = useStore($shoppingCart)
   console.log(shoppingCart)
 
-  // const isInCart = shoppingCart.some(
-  //   (cartItem: any) => cartItem.partId === item.id
-  // )
-
-  //ig
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
   // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
+
+  const isInCart = shoppingCart.some((cartItem) => cartItem.partId === item.id)
 
   return (
     <li className={`${styles.catalog__list__item} ${darkModeClass}`}>
@@ -38,23 +38,19 @@ const CatalogItem = ({ item }: { item: IBoilerPart }) => {
         <span className={styles.catalog__list__item__price}>
           {formatPrice(item.price)} P
         </span>
-        <button
-          className={`${styles.catalog__list__item__cart}
-          }`}
-          disabled={skeleton}
-        >
-          {skeleton ? (
-            <div
-              className={skeletonStyles.spinner}
-              style={{ top: 6, left: 6 }}
-            />
-          ) : (
-            <span>
-              <CartHoverSvg />
-            </span>
-          )}
-        </button>
       </div>
+      <button
+        className={`${styles.catalog__list__item__cart} ${
+          isInCart ? styles.added : ''
+        }`}
+        disabled={skeleton}
+      >
+        {skeleton ? (
+          <div className={skeletonStyles.spinner} style={{ top: 6, left: 6 }} />
+        ) : (
+          <span>{isInCart ? <CartHoverCheckedSvg /> : <CartHoverSvg />}</span>
+        )}
+      </button>
     </li>
   )
 }

@@ -1,19 +1,23 @@
 /* eslint-disable indent */
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import Select from 'react-select'
+import { useStore } from 'effector-react'
 
 import { IOption, SelectOptionType } from '@/types/common'
 import { createSelectOption } from '@/utils/common'
 import { controlStyles, menuStyles, selectStyles } from './select'
 import { optionStyles } from '@/components/elements/Header/SearchInput'
 import { categoriesOptions } from '@/utils/selectContents'
-import { setBoilerPartsByPopularity, setBoilerPartsCheapFirst, setBoilerPartsExpensiveFirst } from '@/redux/slices/boilerParts'
+import {
+  setBoilerPartsByPopularity,
+  setBoilerPartsCheapFirst,
+  setBoilerPartsExpensiveFirst,
+} from '@/redux/slices/boilerParts'
+import { $mode } from '@/context/mode'
 
 const FilterSelect = () => {
-  //ig
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
+  const mode = useStore($mode)
 
   // состояние выподающего списка инпута-поиска
   const [categoryOption, setCategoryOption] =
