@@ -18,7 +18,6 @@ const CatalogItem = ({ item }: { item: IBoilerPart }) => {
   const mode = useStore($mode)
   //Состояние элементов корзины
   const shoppingCart = useStore($shoppingCart)
-  console.log(shoppingCart)
 
   // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''

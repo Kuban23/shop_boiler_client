@@ -68,8 +68,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
       }
       const offset = +query.offset - 1
       const result = await getBoilerParts(
-        `/boiler-parts?limit=20&offset=${offset}`)
-      //const result = await dispatch(getHandlePaginationPage())
+        `/boiler-parts?limit=20&offset=${offset}`
+      )
       setCurrentPage(offset)
       setBoilerParts(result)
     } catch (error) {
@@ -84,7 +84,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     loadBoilerParts()
   }, [])
 
-  console.log(boilerParts)
+  console.log(boilerParts.rows)
 
   // логика определения кол-ва страниц
   const pagesCount = Math.ceil(boilerParts.count / 20)
@@ -97,18 +97,22 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   //Функция для клика пагинации
   const handlePageChange = async ({ selected }: { selected: number }) => {
     try {
-      const data = await dispatch(getBoilerParts())
+      const data = await getBoilerParts('/boiler-parts?limit=20&offset=0')
+
       if (selected > pagesCount) {
         resetPagination(data)
         return
       }
+
       if (isValidOffset && +query.offset > Math.ceil(data.count / 2)) {
         resetPagination(data)
         return
       }
-      // const result = await getBoilerPartsFx(
-      //   `/boiler-parts?limit=20&offset=${selected}
-      const result = await dispatch(getHandleSelectedPage())
+
+      const result = await getBoilerParts(
+        `/boiler-parts?limit=20&offset=${selected}`
+      )
+
       router.push(
         {
           query: {
@@ -121,8 +125,40 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
       )
       setCurrentPage(selected)
       setBoilerParts(result)
-    } catch (error) {}
+    } catch (error) {
+      toast.error((error as Error).message)
+    } finally {
+    }
   }
+  // const handlePageChange = async ({ selected }: { selected: number }) => {
+  //   try {
+  //     setSkeleton(true)
+  //     const data = await getBoilerParts('/boiler-parts?limit=20&offset=0')
+  //     if (selected > pagesCount) {
+  //       resetPagination(data)
+  //       return
+  //     }
+  //     if (isValidOffset && +query.offset > Math.ceil(data.count / 2)) {
+  //       resetPagination(data)
+  //       return
+  //     }
+  //     const result = await getBoilerParts(
+  //       `/boiler-parts?limit=20&offset=${selected}`
+  //     )
+  //     router.push(
+  //       {
+  //         query: {
+  //           ...router.query,
+  //           offset: selected + 1,
+  //         },
+  //       },
+  //       undefined,
+  //       { shallow: true }
+  //     )
+  //     setCurrentPage(selected)
+  //     setBoilerParts(result)
+  //   } catch (error) {}
+  // }
 
   return (
     <section className={styles.catalog}>
@@ -185,7 +221,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
             breakLinkClassName={`${styles.catalog__bottom__list__break__link} ${darkModeClass}`}
             breakLabel="..."
             pageCount={pagesCount}
-            forcePage={currentPage}
+            forcePage={currentPage} // страница на которую идет переход
             onPageChange={handlePageChange}
           />
         </div>
