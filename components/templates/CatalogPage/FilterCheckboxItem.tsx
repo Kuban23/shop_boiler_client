@@ -1,7 +1,8 @@
-import { useSelector } from 'react-redux'
+import { useStore } from 'effector-react'
 
 import { IFilterCheckboxItem } from '@/types/catalog'
 import styles from '../../templates/CatalogPage/catalogPage.module.scss'
+import { $mode } from '@/context/mode'
 
 const FilterCheckboxItem = ({
   title,
@@ -9,9 +10,7 @@ const FilterCheckboxItem = ({
   id,
   event,
 }: IFilterCheckboxItem) => {
-  //ig
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mode = useSelector((state: any) => state.theme)
+  const mode = useStore($mode)
   // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 

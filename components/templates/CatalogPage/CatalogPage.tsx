@@ -15,6 +15,7 @@ import { $mode } from '@/context/mode'
 import { getBoilerParts } from '@/context/api/boilerParts'
 import { $boilerParts, setBoilerParts } from '@/context/boilerParts'
 import { toast } from 'react-toastify'
+import CatalogFilters from './CatalogFilters'
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const [skeleton, setSkeleton] = React.useState(false)
@@ -185,7 +186,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
         </div>
         <div className={styles.catalog__bottom}>
           <div className={styles.catalog__bottom__inner}>
-            <div className="">Фильтры</div>
+            <CatalogFilters />
             {skeleton ? (
               <ul className={skeletonStyles.skeleton}>
                 {Array.from(new Array(8)).map((_, i) => (
