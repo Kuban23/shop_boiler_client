@@ -131,35 +131,6 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     } finally {
     }
   }
-  // const handlePageChange = async ({ selected }: { selected: number }) => {
-  //   try {
-  //     setSkeleton(true)
-  //     const data = await getBoilerParts('/boiler-parts?limit=20&offset=0')
-  //     if (selected > pagesCount) {
-  //       resetPagination(data)
-  //       return
-  //     }
-  //     if (isValidOffset && +query.offset > Math.ceil(data.count / 2)) {
-  //       resetPagination(data)
-  //       return
-  //     }
-  //     const result = await getBoilerParts(
-  //       `/boiler-parts?limit=20&offset=${selected}`
-  //     )
-  //     router.push(
-  //       {
-  //         query: {
-  //           ...router.query,
-  //           offset: selected + 1,
-  //         },
-  //       },
-  //       undefined,
-  //       { shallow: true }
-  //     )
-  //     setCurrentPage(selected)
-  //     setBoilerParts(result)
-  //   } catch (error) {}
-  // }
 
   return (
     <section className={styles.catalog}>
@@ -187,6 +158,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
         <div className={styles.catalog__bottom}>
           <div className={styles.catalog__bottom__inner}>
             <CatalogFilters />
+            {/* <div>Фильтр....</div> */}
             {skeleton ? (
               <ul className={skeletonStyles.skeleton}>
                 {Array.from(new Array(8)).map((_, i) => (
