@@ -19,7 +19,8 @@ import CatalogFilters from './CatalogFilters'
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const [skeleton, setSkeleton] = React.useState(false)
-
+  const [priceRange, setPriceRange] = React.useState([1000, 9000])
+  const [isPriceRangeChanged, setIsPriceRangeChanged] = React.useState(false)
   const isValidOffset =
     query.offset && !isNaN(+query.offset) && +query.offset > 0
 
@@ -132,6 +133,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     }
   }
 
+  const resetFilterBtnDisabled = !isPriceRangeChanged
+
   return (
     <section className={styles.catalog}>
       <div className={`container ${styles.catalog__container}`}>
@@ -148,7 +151,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
           <div className={styles.catalog__top__inner}>
             <button
               className={`${styles.catalog__top__reset} ${darkModeClass}`}
-              disabled={true}
+              disabled={resetFilterBtnDisabled}
             >
               Сбросить фильтр
             </button>
@@ -157,7 +160,11 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
         </div>
         <div className={styles.catalog__bottom}>
           <div className={styles.catalog__bottom__inner}>
-            <CatalogFilters />
+            <CatalogFilters
+              priceRange={priceRange}
+              setPriceRange={setPriceRange}
+              setIsPriceRangeChanged={setIsPriceRangeChanged}
+            />
             {/* <div>Фильтр....</div> */}
             {skeleton ? (
               <ul className={skeletonStyles.skeleton}>

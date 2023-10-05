@@ -1,11 +1,11 @@
-import React from 'react'
+// import React from 'react'
 
-import { useMediaQuery } from '@/hooks/useMediaQuery'
-import CatalogFiltersDesktop from './CatalogFiltersDesktop'
+// import { useMediaQuery } from '@/hooks/useMediaQuery'
+// import CatalogFiltersDesktop from './CatalogFiltersDesktop'
 
-const CatalogFilters = () => {
-  const isMobile = useMediaQuery(820)
-  return <>{isMobile ? <div /> : <CatalogFiltersDesktop />}</>
-}
+// const CatalogFilters = () => {
+//   const isMobile = useMediaQuery(820)
+//   return <>{isMobile ? <div /> : <CatalogFiltersDesktop />}</>
+// }
 
-export default CatalogFilters
+// export default CatalogFilters

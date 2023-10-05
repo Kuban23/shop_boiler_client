@@ -12,8 +12,15 @@ import {
   updatePartsManufacturer,
 } from '@/context/boilerParts'
 import FilterManufacturerAccordion from './FilterManufacturerAccordion'
+import Accordion from '@/components/elements/Accordion/Accordion'
+import PriceRange from './PriceRange'
+import { ICatalogFilterDesktopProps } from '@/types/catalog'
 
-const CatalogFiltersDesktop = () => {
+const CatalogFiltersDesktop = ({
+  priceRange,
+  setPriceRange,
+  setIsPriceRangeChanged,
+}: ICatalogFilterDesktopProps) => {
   console.log()
   const mode = useStore($mode)
 
@@ -37,6 +44,22 @@ const CatalogFiltersDesktop = () => {
           updateManufacturer={updateBoilerManufacturer}
           setManufacturer={setBoilerManufacturers}
         />
+      </div>
+      <div className={styles.filters__price}>
+        <Accordion
+          title="Цена"
+          titleClass={`${styles.filters__manufacturer__btn} ${darkModeClass}`}
+          arrowOpenClass={styles.open}
+        >
+          <div className={styles.filters__manufacturer__inner}>
+            <PriceRange
+              priceRange={priceRange}
+              setPriceRange={setPriceRange}
+              setIsPriceRangeChanged={setIsPriceRangeChanged}
+            />
+            <div style={{ height: 24 }} />
+          </div>
+        </Accordion>
       </div>
       <div className={styles.filters__boiler_manufacturers}>
         <FilterManufacturerAccordion
