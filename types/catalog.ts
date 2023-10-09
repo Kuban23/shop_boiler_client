@@ -2,6 +2,14 @@ import { Event } from 'effector-next'
 
 export interface IManufacturersBlockProps {
   title: string
+  item: IFilterCheckboxItem
+  manufacturersList: IFilterCheckboxItem[]
+  event: Event<IFilterCheckboxItem>
+}
+
+export interface IManufacturersBlockItemProps {
+  item: IFilterCheckboxItem
+  event: Event<IFilterCheckboxItem>
 }
 
 export interface IQueryParams {
