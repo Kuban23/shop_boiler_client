@@ -8,8 +8,11 @@ const CatalogFilters = ({
   priceRange,
   setPriceRange,
   setIsPriceRangeChanged,
+  resetFilters,
+  resetFilterBtnDisabled,
 }: ICatalogFiltersProps) => {
   const isMobile = useMediaQuery(820)
+  const [spinner] = React.useState(false)
   return (
     <>
       {isMobile ? (
@@ -19,6 +22,9 @@ const CatalogFilters = ({
           priceRange={priceRange}
           setPriceRange={setPriceRange}
           setIsPriceRangeChanged={setIsPriceRangeChanged}
+          resetFilters={resetFilters}
+          resetFilterBtnDisabled={resetFilterBtnDisabled}
+          spinner={spinner}
         />
       )}
     </>

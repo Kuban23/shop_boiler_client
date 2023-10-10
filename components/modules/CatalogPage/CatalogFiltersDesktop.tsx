@@ -15,11 +15,15 @@ import FilterManufacturerAccordion from './FilterManufacturerAccordion'
 import Accordion from '@/components/elements/Accordion/Accordion'
 import PriceRange from './PriceRange'
 import { ICatalogFilterDesktopProps } from '@/types/catalog'
+import skeletonStyles from '@/styles/skeleton/index.module.scss'
 
 const CatalogFiltersDesktop = ({
   priceRange,
   setPriceRange,
   setIsPriceRangeChanged,
+  resetFilters,
+  resetFilterBtnDisabled,
+  spinner,
 }: ICatalogFilterDesktopProps) => {
   console.log()
   const mode = useStore($mode)
@@ -68,6 +72,28 @@ const CatalogFiltersDesktop = ({
           updateManufacturer={updatePartsManufacturer}
           setManufacturer={setPartsManufacturers}
         />
+      </div>
+      <div className={styles.filters__actions}>
+        <button
+          className={styles.filters__actions__show}
+          disabled={spinner || resetFilterBtnDisabled}
+        >
+          {spinner ? (
+            <span
+              className={skeletonStyles.spinner}
+              style={{ top: 6, left: '47%' }}
+            />
+          ) : (
+            'Показать'
+          )}
+        </button>
+        <button
+          className={styles.filters__actions__reset}
+          disabled={resetFilterBtnDisabled}
+          onClick={resetFilters}
+        >
+          Сбросить
+        </button>
       </div>
     </div>
   )

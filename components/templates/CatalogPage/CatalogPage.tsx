@@ -17,7 +17,9 @@ import {
   $boilerManufacturers,
   $boilerParts,
   $partsManufacturers,
+  setBoilerManufacturers,
   setBoilerParts,
+  setPartsManufacturers,
   updateBoilerManufacturer,
   updatePartsManufacturer,
 } from '@/context/boilerParts'
@@ -152,6 +154,24 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 
   const resetFilterBtnDisabled = !isPriceRangeChanged
 
+  // функция для сброса всех фильтров
+  const resetFilters = async () => {
+    try {
+      const data = await getBoilerParts('/boiler-parts?limit=20&offset=0')
+      setBoilerManufacturers(
+        boilerManufacturers.map((item) => ({ ...item, checked: false }))
+      )
+      setPartsManufacturers(
+        partsManufacturers.map((item) => ({ ...item, checked: false }))
+      )
+      setBoilerParts(data)
+      setPriceRange([1000, 9000])
+      setIsPriceRangeChanged(false)
+    } catch (error) {
+      toast.error((error as Error).message)
+    }
+  }
+
   return (
     <section className={styles.catalog}>
       <div className={`container ${styles.catalog__container}`}>
@@ -181,6 +201,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
             <button
               className={`${styles.catalog__top__reset} ${darkModeClass}`}
               disabled={resetFilterBtnDisabled}
+              onClick={resetFilters}
             >
               Сбросить фильтр
             </button>
@@ -193,6 +214,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
               priceRange={priceRange}
               setPriceRange={setPriceRange}
               setIsPriceRangeChanged={setIsPriceRangeChanged}
+              resetFilters={resetFilters}
+              resetFilterBtnDisabled={resetFilterBtnDisabled}
             />
             {/* <div>Фильтр....</div> */}
             {skeleton ? (
