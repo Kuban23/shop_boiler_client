@@ -152,7 +152,11 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     }
   }
 
-  const resetFilterBtnDisabled = !isPriceRangeChanged
+  const resetFilterBtnDisabled = !(
+    isPriceRangeChanged ||
+    isAnyBoilerManufacturerChecked ||
+    isAnyPartsManufacturerChecked
+  )
 
   // функция для сброса всех фильтров
   const resetFilters = async () => {
