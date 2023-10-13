@@ -24,6 +24,7 @@ const CatalogFiltersDesktop = ({
   resetFilters,
   resetFilterBtnDisabled,
   spinner,
+  applyFilters,
 }: ICatalogFilterDesktopProps) => {
   console.log()
   const mode = useStore($mode)
@@ -77,6 +78,7 @@ const CatalogFiltersDesktop = ({
         <button
           className={styles.filters__actions__show}
           disabled={spinner || resetFilterBtnDisabled}
+          onClick={applyFilters}
         >
           {spinner ? (
             <span

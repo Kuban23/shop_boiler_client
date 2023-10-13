@@ -41,6 +41,8 @@ export interface ICatalogFiltersProps {
   setIsPriceRangeChanged: (arg0: boolean) => void
   resetFilters: VoidFunction
   resetFilterBtnDisabled: boolean
+  currentPage: number
+  setIsFilterInQuery: (arg0: boolean) => void
 }
 
 export interface IPriceRangeProps {
@@ -49,6 +51,12 @@ export interface IPriceRangeProps {
   setIsPriceRangeChanged: (arg0: boolean) => void
 }
 
-export interface ICatalogFilterDesktopProps extends ICatalogFiltersProps {
+export interface ICatalogFilterDesktopProps {
+  priceRange: number[]
+  setPriceRange: (arg0: number[]) => void
+  setIsPriceRangeChanged: (arg0: boolean) => void
+  resetFilters: VoidFunction
+  resetFilterBtnDisabled: boolean
   spinner: boolean
+  applyFilters: VoidFunction
 }

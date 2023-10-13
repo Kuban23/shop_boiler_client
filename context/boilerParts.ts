@@ -22,6 +22,8 @@ export const updateBoilerManufacturer =
 export const updatePartsManufacturer =
   boilerParts.createEvent<IFilterCheckboxItem>()
 
+export const setFilteredBoilerParts = boilerParts.createEvent()
+
 // функция для сторов updateBoilerManufacturer, updatePartsManufacturer
 const updateManufacturer = (
   manufacturers: IFilterCheckboxItem[],
@@ -78,3 +80,8 @@ export const $partsManufacturers = boilerParts
       checked: payload.checked,
     }),
   ])
+
+// состояние отфильтрованных параметров
+export const $filteredBoilerParts = boilerParts
+  .createStore<IBoilerParts>({} as IBoilerParts)
+  .on(setFilteredBoilerParts, (_, parts) => parts)

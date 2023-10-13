@@ -16,6 +16,7 @@ import { getBoilerParts } from '@/context/api/boilerParts'
 import {
   $boilerManufacturers,
   $boilerParts,
+  $filteredBoilerParts,
   $partsManufacturers,
   setBoilerManufacturers,
   setBoilerParts,
@@ -39,8 +40,11 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     isValidOffset ? +query.offset - 1 : 0
   )
 
+  const [isFilterInQuery, setIsFilterInQuery] = React.useState(false)
+
   const boilerManufacturers = useStore($boilerManufacturers)
   const partsManufacturers = useStore($partsManufacturers)
+  const filteredBoilerParts = useStore($filteredBoilerParts)
 
   const mode = useStore($mode)
   const boilerParts = useStore($boilerParts)
@@ -76,16 +80,19 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
             { shallow: true }
           )
           setCurrentPage(0)
-          setBoilerParts(data)
+          setBoilerParts(isFilterInQuery ? filteredBoilerParts : data)
           return
         }
+        const offset = +query.offset - 1
+        const result = await getBoilerParts(
+          `/boiler-parts?limit=20&offset=${offset}`
+        )
+        setCurrentPage(offset)
+        setBoilerParts(isFilterInQuery ? filteredBoilerParts : result)
+        return
       }
-      const offset = +query.offset - 1
-      const result = await getBoilerParts(
-        `/boiler-parts?limit=20&offset=${offset}`
-      )
-      setCurrentPage(offset)
-      setBoilerParts(result)
+      setCurrentPage(0)
+      setBoilerParts(isFilterInQuery ? filteredBoilerParts : data)
     } catch (error) {
       toast.error((error as Error).message)
     } finally {
@@ -103,7 +110,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   // эффект который при загрузке каталога подгружать товары
   React.useEffect(() => {
     loadBoilerParts()
-  }, [])
+  }, [filteredBoilerParts, isFilterInQuery])
 
   console.log(boilerParts.rows)
 
@@ -220,6 +227,9 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
               setIsPriceRangeChanged={setIsPriceRangeChanged}
               resetFilters={resetFilters}
               resetFilterBtnDisabled={resetFilterBtnDisabled}
+              isPriceRangeChanged={isPriceRangeChanged}
+              currentPage={currentPage}
+              setIsFilterInQuery={setIsFilterInQuery}
             />
             {/* <div>Фильтр....</div> */}
             {skeleton ? (
