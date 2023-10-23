@@ -12,9 +12,11 @@ export const setBoilerPartsCheapFirst = boilerParts.createEvent()
 export const setBoilerPartsExpensiveFirst = boilerParts.createEvent()
 export const setBoilerPartsByPopularity = boilerParts.createEvent()
 // для производителя котлов
-export const setBoilerManufacturers = boilerParts.createEvent()
+export const setBoilerManufacturers =
+  boilerParts.createEvent<IFilterCheckboxItem[]>()
 // для производителя запчастей
-export const setPartsManufacturers = boilerParts.createEvent()
+export const setPartsManufacturers =
+  boilerParts.createEvent<IFilterCheckboxItem[]>()
 
 // для изменения производителей котлов и запчастей
 export const updateBoilerManufacturer =

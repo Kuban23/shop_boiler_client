@@ -43,6 +43,7 @@ export interface ICatalogFiltersProps {
   resetFilterBtnDisabled: boolean
   currentPage: number
   setIsFilterInQuery: (arg0: boolean) => void
+  isPriceRangeChanged: boolean
 }
 
 export interface IPriceRangeProps {
