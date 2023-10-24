@@ -147,6 +147,46 @@ const CatalogFilters = ({
         )
         setFilteredBoilerParts(data)
       }
+
+      if (boilers.length && isPriceRangeChanged) {
+        router.push(
+          {
+            query: {
+              ...router.query,
+              boiler: encodedBoilerQuery,
+              priceFrom,
+              priceTo,
+              offset: initialPage + 1,
+            },
+          },
+          undefined,
+          { shallow: true }
+        )
+        const data = await getBoilerParts(
+          `/boiler-parts?limit=20&offset=${initialPage}${boilerQuery}${priceQuery}`
+        )
+        setFilteredBoilerParts(data)
+      }
+
+      if (parts.length && isPriceRangeChanged) {
+        router.push(
+          {
+            query: {
+              ...router.query,
+              parts: encodedPartsQuery,
+              priceFrom,
+              priceTo,
+              offset: initialPage + 1,
+            },
+          },
+          undefined,
+          { shallow: true }
+        )
+        const data = await getBoilerParts(
+          `/boiler-parts?limit=20&offset=${initialPage}${partsQuery}${priceQuery}`
+        )
+        setFilteredBoilerParts(data)
+      }
     } catch (error) {
       toast.error((error as Error).message)
     } finally {
