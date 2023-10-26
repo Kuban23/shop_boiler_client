@@ -1,3 +1,5 @@
+import { NextRouter } from 'next/router'
+
 export const getWindowWidth = () => {
   const { innerWidth: windowWidth } =
     typeof window !== 'undefined' ? window : { innerWidth: 0 }
@@ -34,30 +36,9 @@ export const idGenerator = () => {
   )
 }
 
-// // Функция для клика по аватарке расположенной в hader
-// export function withClickOutside(
-//   WrappedComponent: ForwardRefExoticComponent<
-//     IWrappedComponentProps & RefAttributes<HTMLDivElement>
-//   >
-// ) {
-//   const Component = () => {
-//     const [open, setOpen] = React.useState(false)
-//     const ref = React.useRef() as MutableRefObject<HTMLDivElement>
-
-//     React.useEffect(() => {
-//       const handleClickOutside = (e: MouseEvent) => {
-//         if (!ref.current.contains(e.target as HTMLDivElement)) {
-//           setOpen(false)
-//         }
-//       }
-
-//       document.addEventListener('mousedown', handleClickOutside)
-
-//       return () => document.removeEventListener('mousedown', handleClickOutside)
-//     }, [ref])
-
-//     return <WrappedComponent open={open} setOpen={setOpen} ref={ref} />
-//   }
-
-//   return Component
-// }
+export const getQueryParamOnFirstRender = (
+  queryName: string,
+  router: NextRouter
+) =>
+  router.query[queryName] ||
+  router.asPath.match(new RegExp(`[&?]${queryName}=(.*)(&|$)`))

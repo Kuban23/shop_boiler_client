@@ -16,7 +16,7 @@ import {
   setBoilerPartsExpensiveFirst,
 } from '@/context/boilerParts'
 
-const FilterSelect = () => {
+const FilterSelect = ({ setSkeleton }: { setSkeleton: () => void }) => {
   const mode = useStore($mode)
   const router = useRouter()
   // состояние выподающего списка инпута-поиска
@@ -70,6 +70,7 @@ const FilterSelect = () => {
 
   // функция которая будет сетить каждую опцию
   const handleSortOptionChange = (selectedOption: SelectOptionType) => {
+    setSkeleton(true)
     setCategoryOption(selectedOption)
     switch ((selectedOption as IOption).value) {
       case 'Сначала дешевые':
@@ -85,6 +86,7 @@ const FilterSelect = () => {
         updateRoteParam('popular')
         break
     }
+    setTimeout(() => setSkeleton(false), 1000)
   }
 
   return (

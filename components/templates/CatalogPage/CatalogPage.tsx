@@ -125,6 +125,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   //Функция для клика пагинации
   const handlePageChange = async ({ selected }: { selected: number }) => {
     try {
+      setSkeleton(true)
       const data = await getBoilerParts('/boiler-parts?limit=20&offset=0')
 
       if (selected > pagesCount) {
@@ -168,6 +169,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     } catch (error) {
       toast.error((error as Error).message)
     } finally {
+      setTimeout(() => setSkeleton(false), 1000)
     }
   }
 
@@ -181,6 +183,16 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const resetFilters = async () => {
     try {
       const data = await getBoilerParts('/boiler-parts?limit=20&offset=0')
+      const params = router.query
+
+      delete params.boiler
+      delete params.parts
+      delete params.priceFrom
+      delete params.priceTo
+      params.first = 'cheap'
+
+      router.push({ query: { ...params } }, undefined, { shallow: true })
+
       setBoilerManufacturers(
         boilerManufacturers.map((item) => ({ ...item, checked: false }))
       )
@@ -192,6 +204,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
       setIsPriceRangeChanged(false)
     } catch (error) {
       toast.error((error as Error).message)
+    } finally {
+      setTimeout(() => setSkeleton(false), 1000)
     }
   }
 
@@ -228,7 +242,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
             >
               Сбросить фильтр
             </button>
-            <FilterSelect />
+            <FilterSelect setSkeleton={setSkeleton} />
           </div>
         </div>
         <div className={styles.catalog__bottom}>
@@ -246,7 +260,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
             {/* <div>Фильтр....</div> */}
             {skeleton ? (
               <ul className={skeletonStyles.skeleton}>
-                {Array.from(new Array(8)).map((_, i) => (
+                {Array.from(new Array(20)).map((_, i) => (
                   <li
                     key={i}
                     className={`${skeletonStyles.skeleton__item} ${
