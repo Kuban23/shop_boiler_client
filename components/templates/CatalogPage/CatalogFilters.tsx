@@ -9,7 +9,9 @@ import { ICatalogFiltersProps } from '@/types/catalog'
 import {
   $boilerManufacturers,
   $partsManufacturers,
+  setBoilerManufacturersFromQuery,
   setFilteredBoilerParts,
+  setPartsManufacturersFromQuery,
 } from '@/context/boilerParts'
 import { getBoilerParts } from '@/context/api/boilerParts'
 import { getQueryParamOnFirstRender } from '@/utils/common'
@@ -60,9 +62,33 @@ const CatalogFilters = ({
       )}`
       const partsQuery = `&parts=${getQueryParamOnFirstRender('parts', router)}`
       const priceQuery = `&priceFrom=${priceFromQueryValue}&priceTo=${priceToQueryValue}`
+
+      if (
+        isValidBoilerQuery &&
+        isValidPartsQuery &&
+        priceFromQueryValue &&
+        priceToQueryValue
+      ) {
+        updateParamsAndFiltersFromQuery(() => {
+          setIsFilterInQuery(true)
+          setPriceRange([+priceFromQueryValue, +priceToQueryValue])
+          setIsPriceRangeChanged(true)
+          setBoilerManufacturersFromQuery(boilerQueryValue)
+          setPartsManufacturersFromQuery(partsQueryValue)
+        }, `${currentPage}${priceQuery}${boilerQuery}${partsQuery}`)
+      }
     } catch (error) {
       toast.error((error as Error).message)
     }
+  }
+
+  const updateParamsAndFiltersFromQuery = async (
+    callback: VoidFunction,
+    path: string
+  ) => {
+    callback()
+    const data = await getBoilerParts(`/boiler-parts?limit=20&offset=${path}`)
+    setFilteredBoilerParts(data)
   }
 
   async function updateParamsAndFilters<T>(updatedParams: T, path: string) {

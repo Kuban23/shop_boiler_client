@@ -23,8 +23,26 @@ export const updateBoilerManufacturer =
   boilerParts.createEvent<IFilterCheckboxItem>()
 export const updatePartsManufacturer =
   boilerParts.createEvent<IFilterCheckboxItem>()
-
 export const setFilteredBoilerParts = boilerParts.createEvent()
+export const setBoilerManufacturersFromQuery =
+  boilerParts.createEvent<string[]>()
+export const setPartsManufacturersFromQuery =
+  boilerParts.createEvent<string[]>()
+
+const updateManufacturerFromQuery = (
+  manufacturers: IFilterCheckboxItem[],
+  manufacturersFromQuery: string[]
+) =>
+  manufacturers.map((item) => {
+    if (manufacturersFromQuery.find((title) => title === item.title)) {
+      return {
+        ...item,
+        checked: true,
+      }
+    }
+
+    return item
+  })
 
 // функция для сторов updateBoilerManufacturer, updatePartsManufacturer
 const updateManufacturer = (
@@ -70,6 +88,9 @@ export const $boilerManufacturers = boilerParts
       checked: payload.checked,
     }),
   ])
+  .on(setBoilerManufacturersFromQuery, (state, manufacturersFromQuery) => [
+    ...updateManufacturerFromQuery(state, manufacturersFromQuery),
+  ])
 
 //состояние производителей запчастей
 export const $partsManufacturers = boilerParts
@@ -81,6 +102,9 @@ export const $partsManufacturers = boilerParts
     ...updateManufacturer(state, payload.id as string, {
       checked: payload.checked,
     }),
+  ])
+  .on(setPartsManufacturersFromQuery, (state, manufacturersFromQuery) => [
+    ...updateManufacturerFromQuery(state, manufacturersFromQuery),
   ])
 
 // состояние отфильтрованных параметров
