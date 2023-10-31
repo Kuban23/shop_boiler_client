@@ -76,6 +76,58 @@ const CatalogFilters = ({
           setBoilerManufacturersFromQuery(boilerQueryValue)
           setPartsManufacturersFromQuery(partsQueryValue)
         }, `${currentPage}${priceQuery}${boilerQuery}${partsQuery}`)
+        return
+      }
+
+      if (priceFromQueryValue && priceToQueryValue) {
+        updateParamsAndFiltersFromQuery(() => {
+          setIsFilterInQuery(true)
+          setPriceRange([+priceFromQueryValue, +priceToQueryValue])
+          setIsPriceRangeChanged(true)
+        }, `${currentPage}${priceQuery}`)
+      }
+
+      if (isValidBoilerQuery && isValidPartsQuery) {
+        updateParamsAndFiltersFromQuery(() => {
+          setIsFilterInQuery(true)
+          setBoilerManufacturersFromQuery(boilerQueryValue)
+          setPartsManufacturersFromQuery(partsQueryValue)
+        }, `${currentPage}${boilerQuery}${partsQuery}`)
+        return
+      }
+
+      if (isValidBoilerQuery) {
+        updateParamsAndFiltersFromQuery(() => {
+          setIsFilterInQuery(true)
+          setBoilerManufacturersFromQuery(boilerQueryValue)
+        }, `${currentPage}${boilerQuery}`)
+      }
+
+      if (isValidPartsQuery) {
+        updateParamsAndFiltersFromQuery(() => {
+          setIsFilterInQuery(true)
+          setPartsManufacturersFromQuery(partsQueryValue)
+        }, `${currentPage}${partsQuery}`)
+      }
+
+      if (isValidPartsQuery && priceFromQueryValue && priceToQueryValue) {
+        updateParamsAndFiltersFromQuery(() => {
+          setIsFilterInQuery(true)
+          setPriceRange([+priceFromQueryValue, +priceToQueryValue])
+          setIsPriceRangeChanged(true)
+          setPartsManufacturersFromQuery(partsQueryValue)
+        }, `${currentPage}${priceQuery}${partsQuery}`)
+        return
+      }
+
+      if (isValidBoilerQuery && priceFromQueryValue && priceToQueryValue) {
+        updateParamsAndFiltersFromQuery(() => {
+          setIsFilterInQuery(true)
+          setPriceRange([+priceFromQueryValue, +priceToQueryValue])
+          setIsPriceRangeChanged(true)
+          setBoilerManufacturersFromQuery(boilerQueryValue)
+        }, `${currentPage}${priceQuery}${boilerQuery}`)
+        return
       }
     } catch (error) {
       toast.error((error as Error).message)
