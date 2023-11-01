@@ -57,6 +57,7 @@ export interface ICatalogFiltersProps
   currentPage: number
   setIsFilterInQuery: (arg0: boolean) => void
   isPriceRangeChanged: boolean
+  closePopup: VoidFunction
 }
 
 export type IPriceRangeProps = ICatalogBaseTypes
@@ -83,6 +84,7 @@ export interface ICatalogFilterMobileProps
     ICatalogFiltersBaseTypes {
   spinner: boolean
   applyFilters: VoidFunction
+  closePopup: VoidFunction
 }
 
 export interface IFiltersPopupTop {

@@ -15,6 +15,8 @@ import {
 } from '@/context/boilerParts'
 import { getBoilerParts } from '@/context/api/boilerParts'
 import { getQueryParamOnFirstRender } from '@/utils/common'
+import CatalogFiltersMobile from './CatalogFiltersMobile'
+import { checkQueryParams } from '@/utils/catalog'
 
 const CatalogFilters = ({
   priceRange,
@@ -25,37 +27,58 @@ const CatalogFilters = ({
   isPriceRangeChanged,
   currentPage,
   setIsFilterInQuery,
+  closePopup,
 }: ICatalogFiltersProps) => {
   const isMobile = useMediaQuery(820)
   const [spinner, setSpinner] = React.useState(false)
   const boilerManufacturers = useStore($boilerManufacturers)
   const partsManufacturers = useStore($partsManufacturers)
   const router = useRouter()
+
   React.useEffect(() => {
     applyFiltersFromQuery()
   }, [])
 
+  // const checkPriceFromQuery = (price: number) =>
+  //   price && !isNaN(price) && price >= 0 && price <= 10000
+
   const applyFiltersFromQuery = async () => {
     try {
-      const priceFromQueryValue = getQueryParamOnFirstRender(
-        'priceFrom',
-        router
-      )
-      const priceToQueryValue = getQueryParamOnFirstRender('priceTo', router)
-      const boilerQueryValue = JSON.parse(
-        decodeURIComponent(
-          getQueryParamOnFirstRender('boiler', router) as string
-        )
-      )
-      const partsQueryValue = JSON.parse(
-        decodeURIComponent(
-          getQueryParamOnFirstRender('parts', router) as string
-        )
-      )
-      const isValidBoilerQuery =
-        Array.isArray(boilerQueryValue) && !!boilerQueryValue?.length
-      const isValidPartsQuery =
-        Array.isArray(partsQueryValue) && !!partsQueryValue?.length
+      const {
+        isValidBoilerQuery,
+        isValidPartsQuery,
+        isValidPriceQuery,
+        partsQueryValue,
+        priceFromQueryValue,
+        boilerQueryValue,
+        priceToQueryValue,
+      } = checkQueryParams(router)
+      // const priceFromQueryValue = getQueryParamOnFirstRender(
+      //   'priceFrom',
+      //   router
+      // ) as string
+      // const priceToQueryValue = getQueryParamOnFirstRender(
+      //   'priceTo',
+      //   router
+      // ) as string
+      // const boilerQueryValue = JSON.parse(
+      //   decodeURIComponent(
+      //     getQueryParamOnFirstRender('boiler', router) as string
+      //   )
+      // )
+      // const partsQueryValue = JSON.parse(
+      //   decodeURIComponent(
+      //     getQueryParamOnFirstRender('parts', router) as string
+      //   )
+      // )
+      // const isValidBoilerQuery =
+      //   Array.isArray(boilerQueryValue) && !!boilerQueryValue?.length
+      // const isValidPartsQuery =
+      //   Array.isArray(partsQueryValue) && !!partsQueryValue?.length
+      // const isValidPriceQuery =
+      //   checkPriceFromQuery(+priceFromQueryValue) &&
+      //   checkPriceFromQuery(+priceToQueryValue)
+
       const boilerQuery = `&boiler=${getQueryParamOnFirstRender(
         'boiler',
         router
@@ -66,8 +89,9 @@ const CatalogFilters = ({
       if (
         isValidBoilerQuery &&
         isValidPartsQuery &&
-        priceFromQueryValue &&
-        priceToQueryValue
+        isValidPriceQuery
+        // priceFromQueryValue &&
+        // priceToQueryValue
       ) {
         updateParamsAndFiltersFromQuery(() => {
           setIsFilterInQuery(true)
@@ -110,7 +134,7 @@ const CatalogFilters = ({
         }, `${currentPage}${partsQuery}`)
       }
 
-      if (isValidPartsQuery && priceFromQueryValue && priceToQueryValue) {
+      if (isValidPartsQuery && isValidPriceQuery) {
         updateParamsAndFiltersFromQuery(() => {
           setIsFilterInQuery(true)
           setPriceRange([+priceFromQueryValue, +priceToQueryValue])
@@ -120,7 +144,7 @@ const CatalogFilters = ({
         return
       }
 
-      if (isValidBoilerQuery && priceFromQueryValue && priceToQueryValue) {
+      if (isValidBoilerQuery && isValidPriceQuery) {
         updateParamsAndFiltersFromQuery(() => {
           setIsFilterInQuery(true)
           setPriceRange([+priceFromQueryValue, +priceToQueryValue])
@@ -368,7 +392,7 @@ const CatalogFilters = ({
   return (
     <>
       {isMobile ? (
-        <div />
+        <CatalogFiltersMobile closePopup={closePopup} />
       ) : (
         <CatalogFiltersDesktop
           priceRange={priceRange}

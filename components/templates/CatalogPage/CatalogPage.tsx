@@ -26,6 +26,8 @@ import {
 } from '@/context/boilerParts'
 import { toast } from 'react-toastify'
 import CatalogFilters from './CatalogFilters'
+import { usePopup } from '@/hooks/usePoup'
+import { checkQueryParams } from '@/utils/catalog'
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const [skeleton, setSkeleton] = React.useState(false)
@@ -45,6 +47,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const boilerManufacturers = useStore($boilerManufacturers)
   const partsManufacturers = useStore($partsManufacturers)
   const filteredBoilerParts = useStore($filteredBoilerParts)
+
+  const { toggleOpen, open, closePopup } = usePopup()
 
   const mode = useStore($mode)
   const boilerParts = useStore($boilerParts)
@@ -138,17 +142,20 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
         return
       }
 
+      const { isValidBoilerQuery, isValidPartsQuery, isValidPriceQuery } =
+        checkQueryParams(router)
+
       const result = await getBoilerParts(
         `/boiler-parts?limit=20&offset=${selected}${
-          isFilterInQuery && router.query.boiler
+          isFilterInQuery && isValidBoilerQuery
             ? `&boiler=${router.query.boiler}`
             : ''
         }${
-          isFilterInQuery && router.query.parts
+          isFilterInQuery && isValidPartsQuery
             ? `&parts=${router.query.parts}`
             : ''
         }${
-          isFilterInQuery && router.query.priceFrom && router.query.priceTo
+          isFilterInQuery && isValidPriceQuery
             ? `&priceFrom=${router.query.priceFrom}&priceTo=${router.query.priceTo}`
             : ''
         }`
@@ -256,6 +263,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
               isPriceRangeChanged={isPriceRangeChanged}
               currentPage={currentPage}
               setIsFilterInQuery={setIsFilterInQuery}
+              closePopup={closePopup}
             />
             {/* <div>Фильтр....</div> */}
             {skeleton ? (
