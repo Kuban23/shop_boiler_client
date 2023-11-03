@@ -6,23 +6,64 @@ import styles from '../../templates/CatalogPage/catalogPage.module.scss'
 import { ICatalogFilterMobileProps } from '@/types/catalog'
 import FiltersPopupTop from './FiltersPopupTop'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
+import FiltersPopup from './FiltersPopup'
+import {
+  $boilerManufacturers,
+  $partsManufacturers,
+  setBoilerManufacturers,
+  setPartsManufacturers,
+  updateBoilerManufacturer,
+  updatePartsManufacturer,
+} from '@/context/boilerParts'
 
 const CatalogFiltersMobile = ({
   spinner,
   resetFilterBtnDisabled,
   resetFilters,
+  applyFilters,
+  closePopup,
+  filtersMobileOpen,
 }: ICatalogFilterMobileProps) => {
   const mode = useStore($mode)
   // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
+  const boilerManufacturers = useStore($boilerManufacturers)
+  const partsManufacturers = useStore($partsManufacturers)
+  const [openBoilers, setOpenBoilers] = React.useState(false)
+  const [openParts, setOpenParts] = React.useState(false)
+  const handleOpenBoilers = () => setOpenBoilers(true)
+  const handleCloseBoilers = () => setOpenBoilers(false)
+  const handleOpenParts = () => setOpenParts(true)
+  const handleCloseParts = () => setOpenParts(false)
+  const isAnyBoilerManufacturerChecked = boilerManufacturers.some(
+    (item) => item.checked
+  )
+  const isAnyPartsManufacturerChecked = partsManufacturers.some(
+    (item) => item.checked
+  )
+
   const applyFiltersAndClosePopup = () => {
-    // applyFilters()
-    // closePopup()
+    applyFilters()
+    closePopup()
   }
 
+  const resetAllBoilerManufacturers = () =>
+    setBoilerManufacturers(
+      boilerManufacturers.map((item) => ({ ...item, checked: false }))
+    )
+
+  const resetAllPartsManufacturers = () =>
+    setPartsManufacturers(
+      partsManufacturers.map((item) => ({ ...item, checked: false }))
+    )
+
   return (
-    <div className={`${styles.catalog__bottom__filters} ${darkModeClass}`}>
+    <div
+      className={`${styles.catalog__bottom__filters} ${darkModeClass} ${
+        filtersMobileOpen ? styles.open : ''
+      }`}
+    >
       <div className={styles.catalog__bottom__filters__inner}>
         <FiltersPopupTop
           resetBtnText="Сбросить все"
@@ -31,6 +72,43 @@ const CatalogFiltersMobile = ({
           resetFilterBtnDisabled={resetFilterBtnDisabled}
           closePopup={closePopup}
         />
+        <div className={styles.filters__boiler_manufacturers}>
+          <button
+            className={`${styles.filters__manufacturer__btn} ${darkModeClass}`}
+          >
+            Производитель котлов
+          </button>
+          <FiltersPopup
+            title="Производитель котлов"
+            resetFilterBtnDisabled={!isAnyBoilerManufacturerChecked}
+            updateManufacturer={updateBoilerManufacturer}
+            setManufacturer={setBoilerManufacturers}
+            applyFilters={applyFiltersAndClosePopup}
+            manufacturersList={boilerManufacturers}
+            resetAllManufacturers={resetAllBoilerManufacturers}
+            handleClosePopup={handleCloseBoilers}
+            openPopup={openBoilers}
+          />
+        </div>
+        <div className={styles.filters__boiler_manufacturers}>
+          <button
+            className={`${styles.filters__manufacturer__btn} ${darkModeClass}`}
+            onClick={handleOpenParts}
+          >
+            Производитель запчастей
+          </button>
+          <FiltersPopup
+            title="Производитель запчастей"
+            resetFilterBtnDisabled={!isAnyPartsManufacturerChecked}
+            updateManufacturer={updatePartsManufacturer}
+            setManufacturer={setPartsManufacturers}
+            applyFilters={applyFiltersAndClosePopup}
+            manufacturersList={partsManufacturers}
+            resetAllManufacturers={resetAllPartsManufacturers}
+            handleClosePopup={handleCloseParts}
+            openPopup={openParts}
+          />
+        </div>
       </div>
       <div className={styles.filters__actions}>
         <button

@@ -264,6 +264,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
               currentPage={currentPage}
               setIsFilterInQuery={setIsFilterInQuery}
               closePopup={closePopup}
+              filtersMobileOpen={open}
             />
             {/* <div>Фильтр....</div> */}
             {skeleton ? (

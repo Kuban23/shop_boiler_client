@@ -58,6 +58,7 @@ export interface ICatalogFiltersProps
   setIsFilterInQuery: (arg0: boolean) => void
   isPriceRangeChanged: boolean
   closePopup: VoidFunction
+  filtersMobileOpen: boolean
 }
 
 export type IPriceRangeProps = ICatalogBaseTypes
@@ -85,6 +86,7 @@ export interface ICatalogFilterMobileProps
   spinner: boolean
   applyFilters: VoidFunction
   closePopup: VoidFunction
+  filtersMobileOpen: boolean
 }
 
 export interface IFiltersPopupTop {
@@ -93,4 +95,12 @@ export interface IFiltersPopupTop {
   resetFilters: VoidFunction
   resetFilterBtnDisabled: boolean
   closePopup: VoidFunction
+}
+
+export interface IFiltersPopupProps extends IFilterManufacturerAccordionProps {
+  resetFilterBtnDisabled: boolean
+  resetAllManufacturers: VoidFunction
+  handleClosePopup: VoidFunction
+  applyFilters: VoidFunction
+  openPopup: boolean
 }

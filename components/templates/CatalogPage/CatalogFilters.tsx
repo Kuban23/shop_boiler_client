@@ -28,6 +28,7 @@ const CatalogFilters = ({
   currentPage,
   setIsFilterInQuery,
   closePopup,
+  filtersMobileOpen,
 }: ICatalogFiltersProps) => {
   const isMobile = useMediaQuery(820)
   const [spinner, setSpinner] = React.useState(false)
@@ -392,7 +393,17 @@ const CatalogFilters = ({
   return (
     <>
       {isMobile ? (
-        <CatalogFiltersMobile closePopup={closePopup} />
+        <CatalogFiltersMobile
+          closePopup={closePopup}
+          spinner={spinner}
+          applyFilters={applyFilters}
+          priceRange={priceRange}
+          setIsPriceRangeChanged={setIsPriceRangeChanged}
+          setPriceRange={setPriceRange}
+          resetFilterBtnDisabled={resetFilterBtnDisabled}
+          resetFilters={resetFilters}
+          filtersMobileOpen={filtersMobileOpen}
+        />
       ) : (
         <CatalogFiltersDesktop
           priceRange={priceRange}
