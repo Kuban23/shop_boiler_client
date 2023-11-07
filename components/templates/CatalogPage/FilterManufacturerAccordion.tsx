@@ -10,6 +10,7 @@ import FilterCheckboxItem from './FilterCheckboxItem'
 const FilterManufacturerAccordion = ({
   manufacturersList,
   title,
+  updateManufacturer,
 }: IFilterManufacturerAccordionProps) => {
   console.log()
   const isMobile = useMediaQuery(820)
@@ -38,7 +39,7 @@ const FilterManufacturerAccordion = ({
               id={item.id}
               key={item.id}
               checked={item.checked}
-              event={}
+              event={updateManufacturer}
             />
           ))}
         </ul>

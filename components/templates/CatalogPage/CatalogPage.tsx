@@ -28,6 +28,7 @@ import { toast } from 'react-toastify'
 import CatalogFilters from './CatalogFilters'
 import { usePopup } from '@/hooks/usePoup'
 import { checkQueryParams } from '@/utils/catalog'
+import FilterSvg from '@/components/elements/FilterSvg/FilterSvg'
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const [skeleton, setSkeleton] = React.useState(false)
@@ -248,6 +249,17 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
               onClick={resetFilters}
             >
               Сбросить фильтр
+            </button>
+            <button
+              className={styles.catalog__top__mobile_btn}
+              onClick={toggleOpen}
+            >
+              <span className={styles.catalog__top__mobile_btn__svg}>
+                <FilterSvg />
+              </span>
+              <span className={styles.catalog__top__mobile_btn__text}>
+                Фильтр
+              </span>
             </button>
             <FilterSelect setSkeleton={setSkeleton} />
           </div>

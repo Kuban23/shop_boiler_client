@@ -15,6 +15,9 @@ import {
   updateBoilerManufacturer,
   updatePartsManufacturer,
 } from '@/context/boilerParts'
+import Accordion from '@/components/elements/Accordion/Accordion'
+import PriceRange from '@/components/modules/CatalogPage/PriceRange'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
 
 const CatalogFiltersMobile = ({
   spinner,
@@ -22,11 +25,16 @@ const CatalogFiltersMobile = ({
   resetFilters,
   applyFilters,
   closePopup,
+  setPriceRange,
+  priceRange,
+  setIsPriceRangeChanged,
   filtersMobileOpen,
 }: ICatalogFilterMobileProps) => {
   const mode = useStore($mode)
   // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
+
+  const isMobile = useMediaQuery(820)
 
   const boilerManufacturers = useStore($boilerManufacturers)
   const partsManufacturers = useStore($partsManufacturers)
@@ -75,6 +83,7 @@ const CatalogFiltersMobile = ({
         <div className={styles.filters__boiler_manufacturers}>
           <button
             className={`${styles.filters__manufacturer__btn} ${darkModeClass}`}
+            onClick={handleOpenBoilers}
           >
             Производитель котлов
           </button>
@@ -109,7 +118,26 @@ const CatalogFiltersMobile = ({
             openPopup={openParts}
           />
         </div>
+        <div className={styles.filters__price}>
+          <Accordion
+            title="Цена"
+            titleClass={`${styles.filters__manufacturer__btn} ${darkModeClass}`}
+            // arrowOpenClass={styles.open}
+            hideArrowClass={styles.hide_arrow}
+            isMobileForFilters={isMobile}
+          >
+            <div className={styles.filters__manufacturer__inner}>
+              <PriceRange
+                priceRange={priceRange}
+                setPriceRange={setPriceRange}
+                setIsPriceRangeChanged={setIsPriceRangeChanged}
+              />
+              <div style={{ height: 24 }} />
+            </div>
+          </Accordion>
+        </div>
       </div>
+
       <div className={styles.filters__actions}>
         <button
           className={styles.filters__actions__show}
