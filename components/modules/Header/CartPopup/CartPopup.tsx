@@ -10,12 +10,17 @@ import { withClickOutside } from '@/utils/withClickOutside'
 import ShoppingCartSvg from '@/components/elements/ShoppingCartSvg/ShoppingCartSvg'
 //import { IShoppingCartItem } from '@/types/shopping-cart'
 import { $mode } from '@/context/mode'
-import { $shoppingCart } from '@/context/shopping-cart'
+import { $shoppingCart, setShoppingCart } from '@/context/shopping-cart'
+import CartPopupItem from './CartPopupItem'
+import { toast } from 'react-toastify'
+import { getCartItems } from '@/context/api/shopping-cart'
+import { $user } from '@/context/user'
 
 const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
   ({ open, setOpen }, ref) => {
     // получаю длступ к стору
     const mode = useStore($mode)
+    const user = useStore($user)
     const shoppingCart = useStore($shoppingCart)
     // делаю условие по теме и применю стили
     const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
@@ -23,6 +28,20 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
     //const shoppingCart = useSelector((state: IShoppingCartItem) => state.cart)
 
     const toggleCartDropDown = () => setOpen(!open)
+
+    React.useEffect(() => {
+      loadCartItems()
+    }, [])
+
+    const loadCartItems = async () => {
+      try {
+        const cartItems = await getCartItems(`/shopping-cart/${user.userId}`)
+
+        setShoppingCart(cartItems)
+      } catch (error) {
+        toast.error((error as Error).message)
+      }
+    }
 
     return (
       <div className={styles.cart} ref={ref}>
@@ -54,7 +73,9 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
               <ul className={styles.cart__popup__list}>
                 {/* // Нужно будет перебирать массив с состоянием товара */}
                 {shoppingCart.length ? (
-                  shoppingCart.map((item) => <li key={item.id} />)
+                  shoppingCart.map((item) => (
+                    <CartPopupItem key={item.id} item={item} />
+                  ))
                 ) : (
                   <li className={styles.cart__popup__empty}>
                     <span

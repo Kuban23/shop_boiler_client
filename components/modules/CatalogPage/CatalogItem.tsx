@@ -11,11 +11,14 @@ import skeletonStyles from '@/styles/skeleton/index.module.scss'
 import { $mode } from '@/context/mode'
 import { $shoppingCart } from '@/context/shopping-cart'
 import CartHoverCheckedSvg from '@/components/elements/CartHoverCheckedSvg/CartHoverCheckedSvg'
+import { toggleCartItem } from '@/utils/shopping-cart'
+import { $user } from '@/context/user'
 
 const CatalogItem = ({ item }: { item: IBoilerPart }) => {
   const [skeleton] = React.useState(false)
-
+  // const [spinner, setSpinner] = React.useState(false)
   const mode = useStore($mode)
+  const user = useStore($user)
   //Состояние элементов корзины
   const shoppingCart = useStore($shoppingCart)
 
@@ -23,6 +26,8 @@ const CatalogItem = ({ item }: { item: IBoilerPart }) => {
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const isInCart = shoppingCart.some((cartItem) => cartItem.partId === item.id)
+
+  const toggleToCart = () => toggleCartItem(user.username, item.id, isInCart)
 
   return (
     <li className={`${styles.catalog__list__item} ${darkModeClass}`}>
@@ -43,6 +48,7 @@ const CatalogItem = ({ item }: { item: IBoilerPart }) => {
           isInCart ? styles.added : ''
         }`}
         disabled={skeleton}
+        onClick={toggleToCart}
       >
         {skeleton ? (
           <div className={skeletonStyles.spinner} style={{ top: 6, left: 6 }} />

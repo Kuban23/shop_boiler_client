@@ -11,3 +11,17 @@ export interface IShoppingCartItem {
   userId: number
   partId: number
 }
+
+export interface IAddToCart {
+  url: string
+  username: string
+  partId: number
+}
+
+export interface IUpdateCartItem {
+  url: string
+  payload: {
+    total_price?: number
+    count?: number
+  }
+}
