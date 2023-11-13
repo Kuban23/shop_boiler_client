@@ -7,6 +7,7 @@ import { $mode } from '@/context/mode'
 import styles from './CartPopup.module.scss'
 import DeleteSvg from '@/components/elements/DeleteSvg/DeleteSvg'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
+import { removeItemFromCart } from '@/utils/shopping-cart'
 
 const CartPopupItem = ({ item }: { item: IShoppingCartItem }) => {
   const [spinner, setSpinner] = React.useState(false)
@@ -17,6 +18,8 @@ const CartPopupItem = ({ item }: { item: IShoppingCartItem }) => {
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const spinnerDarkModeClass =
     mode === 'dark' ? '' : `${skeletonStyles.dark_mode}`
+
+  const deleteCartItem = () => removeItemFromCart(item.partId, setSpinner)
 
   return (
     <li className={styles.cart__popup__list__item}>
@@ -34,7 +37,7 @@ const CartPopupItem = ({ item }: { item: IShoppingCartItem }) => {
             </span>
           </a>
         </Link>
-        <button>
+        <button onClick={deleteCartItem}>
           <span>
             {spinner ? (
               <span
