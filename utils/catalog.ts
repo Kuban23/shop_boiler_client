@@ -1,5 +1,7 @@
 import { NextRouter } from 'next/router'
 import { getQueryParamOnFirstRender, idGenerator } from './common'
+import { updateCartItem } from '@/context/api/shopping-cart'
+import { updateCartItemTotalPrice } from '@/context/shopping-cart'
 
 const createManufacturerCheckboxObj = (title: string) => ({
   title,
@@ -67,4 +69,12 @@ export const checkQueryParams = (router: NextRouter) => {
     boilerQueryValue,
     partsQueryValue,
   }
+}
+
+export const updateTotalPrice = async (total_price: number, partId: number) => {
+  const data = await updateCartItem({
+    url: `/shopping-cart/total-price/${partId}`,
+    payload: { total_price },
+  })
+  updateCartItemTotalPrice({ partId, total_price: data.total_price })
 }

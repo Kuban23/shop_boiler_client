@@ -25,3 +25,11 @@ export interface IUpdateCartItem {
     count?: number
   }
 }
+
+export interface ICartItemCounterProps {
+  totalCount: number
+  partId: number
+  initialCount: number
+  increasePrice: VoidFunction
+  decreasePrice: VoidFunction
+}

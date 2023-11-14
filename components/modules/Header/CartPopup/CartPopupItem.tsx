@@ -8,9 +8,11 @@ import styles from './CartPopup.module.scss'
 import DeleteSvg from '@/components/elements/DeleteSvg/DeleteSvg'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
 import { removeItemFromCart } from '@/utils/shopping-cart'
+import { updateTotalPrice } from '@/utils/catalog'
 
 const CartPopupItem = ({ item }: { item: IShoppingCartItem }) => {
   const [spinner, setSpinner] = React.useState(false)
+  const [price, setPrice] = React.useState(item.price)
   // получаю длступ к стору
   const mode = useStore($mode)
 
@@ -20,6 +22,18 @@ const CartPopupItem = ({ item }: { item: IShoppingCartItem }) => {
     mode === 'dark' ? '' : `${skeletonStyles.dark_mode}`
 
   const deleteCartItem = () => removeItemFromCart(item.partId, setSpinner)
+
+  const increasePrice = () => setPrice(price + item.price)
+
+  const decreasePrice = () => setPrice(price - item.price)
+
+  React.useEffect(() => {
+    setPrice(price * item.count)
+  }, [])
+
+  React.useEffect(() => {
+    updateTotalPrice(price, item.partId)
+  }, [price])
 
   return (
     <li className={styles.cart__popup__list__item}>
