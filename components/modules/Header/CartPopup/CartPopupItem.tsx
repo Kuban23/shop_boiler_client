@@ -6,9 +6,11 @@ import { IShoppingCartItem } from '@/types/shopping-cart'
 import { $mode } from '@/context/mode'
 import styles from './CartPopup.module.scss'
 import DeleteSvg from '@/components/elements/DeleteSvg/DeleteSvg'
-import skeletonStyles from '@/styles/skeleton/index.module.scss'
-import { removeItemFromCart } from '@/utils/shopping-cart'
-import { updateTotalPrice } from '@/utils/catalog'
+//import skeletonStyles from '@/styles/skeleton/index.module.scss'
+import { removeItemFromCart, updateTotalPrice } from '@/utils/shopping-cart'
+import CartItemCounter from '@/components/elements/CartItemCounter/CartItemCounter'
+import { formatPrice } from '@/utils/common'
+import spinnerStyles from '../../AuthPage/spinner/index.module.scss'
 
 const CartPopupItem = ({ item }: { item: IShoppingCartItem }) => {
   const [spinner, setSpinner] = React.useState(false)
@@ -19,7 +21,7 @@ const CartPopupItem = ({ item }: { item: IShoppingCartItem }) => {
   // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const spinnerDarkModeClass =
-    mode === 'dark' ? '' : `${skeletonStyles.dark_mode}`
+    mode === 'dark' ? '' : `${spinnerStyles.dark_mode}`
 
   const deleteCartItem = () => removeItemFromCart(item.partId, setSpinner)
 
@@ -55,7 +57,7 @@ const CartPopupItem = ({ item }: { item: IShoppingCartItem }) => {
           <span>
             {spinner ? (
               <span
-                className={`${skeletonStyles.spinner} ${spinnerDarkModeClass}`}
+                className={`${spinnerStyles.spinner} ${spinnerDarkModeClass}`}
                 style={{ top: 0, left: 0, width: 20, height: 20 }}
               />
             ) : (
@@ -71,12 +73,18 @@ const CartPopupItem = ({ item }: { item: IShoppingCartItem }) => {
             Нет на складе
           </span>
         ) : (
-          <div />
+          <CartItemCounter
+            totalCount={item.in_stock}
+            partId={item.partId}
+            initialCount={item.count}
+            increasePrice={increasePrice}
+            decreasePrice={decreasePrice}
+          />
         )}
         <span
           className={`${styles.cart__popup__list__item__price} ${darkModeClass}`}
         >
-          P
+          {formatPrice(price)} P
         </span>
       </div>
     </li>

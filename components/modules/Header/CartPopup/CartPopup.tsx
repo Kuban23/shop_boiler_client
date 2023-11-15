@@ -10,11 +10,17 @@ import { withClickOutside } from '@/utils/withClickOutside'
 import ShoppingCartSvg from '@/components/elements/ShoppingCartSvg/ShoppingCartSvg'
 //import { IShoppingCartItem } from '@/types/shopping-cart'
 import { $mode } from '@/context/mode'
-import { $shoppingCart, setShoppingCart } from '@/context/shopping-cart'
+import {
+  $shoppingCart,
+  $totalPrice,
+  setShoppingCart,
+  setTotalPrice,
+} from '@/context/shopping-cart'
 import CartPopupItem from './CartPopupItem'
 import { toast } from 'react-toastify'
 import { getCartItems } from '@/context/api/shopping-cart'
 import { $user } from '@/context/user'
+import { formatPrice } from '@/utils/common'
 
 const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
   ({ open, setOpen }, ref) => {
@@ -22,6 +28,7 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
     const mode = useStore($mode)
     const user = useStore($user)
     const shoppingCart = useStore($shoppingCart)
+    const totalPrice = useStore($totalPrice)
     // делаю условие по теме и применю стили
     const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
@@ -32,6 +39,15 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
     React.useEffect(() => {
       loadCartItems()
     }, [])
+
+    React.useEffect(() => {
+      setTotalPrice(
+        shoppingCart.reduce(
+          (defaultCount, item) => defaultCount + item.total_price,
+          0
+        )
+      )
+    }, [shoppingCart])
 
     const loadCartItems = async () => {
       try {
@@ -93,7 +109,10 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
                   >
                     Общая сумма заказа:
                   </span>
-                  <span className={styles.cart__popup__footer__price}>0 P</span>
+                  <span className={styles.cart__popup__footer__price}>
+                    {' '}
+                    {formatPrice(totalPrice)} P
+                  </span>
                 </div>
                 <Link href="/order" passHref legacyBehavior>
                   <button

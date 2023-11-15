@@ -1,6 +1,11 @@
-import { addToCart, removeFromCart } from '@/context/api/shopping-cart'
+import {
+  addToCart,
+  removeFromCart,
+  updateCartItem,
+} from '@/context/api/shopping-cart'
 import {
   removeShoppingCartItem,
+  updateCartItemTotalPrice,
   updateShoppingCart,
 } from '@/context/shopping-cart'
 import { toast } from 'react-toastify'
@@ -39,4 +44,12 @@ export const removeItemFromCart = async (partId: number) => {
   } catch (error) {
     toast.error((error as Error).message)
   }
+}
+
+export const updateTotalPrice = async (total_price: number, partId: number) => {
+  const data = await updateCartItem({
+    url: `/shopping-cart/total-price/${partId}`,
+    payload: { total_price },
+  })
+  updateCartItemTotalPrice({ partId, total_price: data.total_price })
 }
