@@ -13,3 +13,10 @@ export const getBoilerParts = createEffect(async (url: string) => {
   const { data } = await api.get(url)
   return data
 })
+
+// запрос одного товара по id
+export const getBoilerPart = createEffect(async (url: string) => {
+  const { data } = await api.get(url)
+
+  return data
+})
