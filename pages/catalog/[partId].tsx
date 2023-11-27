@@ -8,6 +8,7 @@ import { IQueryParams } from '@/types/catalog'
 import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 import { $boilerPart, setBoilerPart } from '@/context/boilerPart'
 import { getBoilerPart } from '@/context/api/boilerParts'
+import PartPage from '@/components/templates/PartPage/PartPage'
 
 function CatalogPartPage({ query }: { query: IQueryParams }) {
   const { shouldLoadContent } = useRedirectByUserCheck()
@@ -43,7 +44,7 @@ function CatalogPartPage({ query }: { query: IQueryParams }) {
       </Head>
       <Layout>
         <main>
-          <h1>{boilerPart.name}</h1>
+          <PartPage />
           <div className="overlay" />
         </main>
       </Layout>
