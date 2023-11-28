@@ -3,7 +3,7 @@ import { useStore } from 'effector-react'
 import { motion } from 'framer-motion'
 
 import { $mode } from '@/context/mode'
-import styles from '@/components/templates/CatalogPage/catalogPage.module.scss'
+import styles from '@/components/templates/PartPage/partPage.module.scss'
 import { $boilerPart } from '@/context/boilerPart'
 
 const PartTabs = () => {
