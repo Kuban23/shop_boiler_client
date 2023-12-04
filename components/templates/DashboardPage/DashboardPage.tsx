@@ -38,6 +38,15 @@ const DashboardPage = () => {
     loadBoilerParts()
   }, [])
 
+  React.useEffect(() => {
+    if (shoppingCart.length) {
+      setShowAlert(true)
+      return
+    }
+
+    setShowAlert(false)
+  }, [shoppingCart.length])
+
   // запрашиваю товар на сервере
   const loadBoilerParts = async () => {
     try {

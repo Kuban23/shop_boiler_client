@@ -6,9 +6,11 @@ import { ICartAlertProps } from '@/types/dashboard'
 import styles from '../../templates/DashboardPage/dashboardPage.module.scss'
 import { formatPrice } from '@/utils/common'
 import { $mode } from '@/context/mode'
+import { $totalPrice } from '@/context/shopping-cart'
 
 const CartAlert = ({ count, closeAlert }: ICartAlertProps) => {
   const mode = useStore($mode)
+  const totalPrice = useStore($totalPrice)
   // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
@@ -29,7 +31,7 @@ const CartAlert = ({ count, closeAlert }: ICartAlertProps) => {
         <span>
           В корзине {count} {showCountMessage(`${count}`)}
         </span>
-        <span>На сумму {formatPrice(0)} P</span>
+        <span>На сумму {formatPrice(totalPrice)} P</span>
       </div>
       <div className={styles.dashboard__alert__right}>
         <Link href="/order" legacyBehavior passHref>
