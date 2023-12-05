@@ -3,6 +3,7 @@ import Head from 'next/head'
 
 import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 import Layout from '@/components/layout/Layout'
+import OrderPage from '@/components/templates/OrderPage/OrderPage'
 
 const Order = () => {
   const { shouldLoadContent } = useRedirectByUserCheck()
@@ -22,7 +23,7 @@ const Order = () => {
       {shouldLoadContent && (
         <Layout>
           <main>
-            <h1>Order</h1>
+            <OrderPage />
             <div className="overlay" />
           </main>
         </Layout>
