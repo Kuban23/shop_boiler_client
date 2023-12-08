@@ -1,11 +1,21 @@
 import React from 'react'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/router'
 
 import styles from './OrderPage.module.scss'
 import { $mode } from '@/context/mode'
 import { useStore } from 'effector-react'
-import { $shoppingCart, $totalPrice } from '@/context/shopping-cart'
+import {
+  $shoppingCart,
+  $totalPrice,
+  setShoppingCart,
+} from '@/context/shopping-cart'
 import { formatPrice } from '@/utils/common'
 import OrderAccordion from '@/components/modules/OrderPage/OrderAccordion'
+import { makePayment } from '@/context/api/payment'
+import { removeFromCart } from '@/context/api/shopping-cart'
+import { $user } from '@/context/user'
+import spinnerStyles from '../../modules/AuthPage/spinner/index.module.scss'
 
 const OrderPage = () => {
   const mode = useStore($mode)
@@ -15,8 +25,26 @@ const OrderPage = () => {
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const [orderIsReady, setOrderIsReady] = React.useState(false)
   const [agreement, setAgreement] = React.useState(false)
+  const spinner = useStore(makePayment.pending)
+  const router = useRouter()
+  const user = useStore($user)
 
   const handleAgreementChange = () => setAgreement(!agreement)
+
+  const makePay = async () => {
+    try {
+      const data = await makePayment({
+        url: '/payment',
+        amount: totalPrice,
+      })
+      sessionStorage.setItem('paymentId', data.id)
+      router.push(data.confirmation.confirmation_url)
+      await removeFromCart(`/shopping-cart/all/${user.userId}`)
+      setShoppingCart([])
+    } catch (error) {
+      toast.error((error as Error).message)
+    }
+  }
 
   return (
     <section className={styles.order}>
@@ -54,8 +82,19 @@ const OrderPage = () => {
                   {formatPrice(totalPrice)} P
                 </span>
               </div>
-              <button className={styles.order__pay__btn}>
-                Подтвердить заказ
+              <button
+                className={styles.order__pay__btn}
+                onClick={makePay}
+                disabled={!(orderIsReady && agreement)}
+              >
+                {spinner ? (
+                  <span
+                    className={spinnerStyles.spinner}
+                    style={{ top: '6px', left: '47%' }}
+                  />
+                ) : (
+                  'Подтвердить заказ'
+                )}
               </button>
               <label
                 className={`${styles.order__pay__rights} ${darkModeClass}`}
