@@ -2,15 +2,14 @@ import React from 'react'
 import Head from 'next/head'
 
 import Layout from '@/components/layout/Layout'
-import AboutPage from '@/components/templates/AboutPage/AboutPage'
+import ContactsPage from '@/components/templates/ContactsPage/ContactsPage'
 
-const About = () => {
+const Contacts = () => {
   console.log()
-
   return (
     <>
       <Head>
-        <title>Магазин котлов | О компании</title>
+        <title>Магазин котлов | Контакты</title>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,7 +17,7 @@ const About = () => {
       </Head>
       <Layout>
         <main>
-          <AboutPage />
+          <ContactsPage />
           <div className="overlay" />
         </main>
       </Layout>
@@ -26,4 +25,4 @@ const About = () => {
   )
 }
 
-export default About
+export default Contacts
