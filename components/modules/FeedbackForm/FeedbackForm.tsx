@@ -2,6 +2,8 @@ import React from 'react'
 import { useStore } from 'effector-react'
 import { useForm } from 'react-hook-form'
 import { MutableRefObject, useRef } from 'react'
+import emailjs from '@emailjs/browser'
+import { toast } from 'react-toastify'
 
 import { $mode } from '@/context/mode'
 import styles from './FeedbackForm.module.scss'
@@ -25,8 +27,24 @@ const FeedbackForm = () => {
   const [spinner, setSpinner] = React.useState(false)
   const formRef = useRef() as MutableRefObject<HTMLFormElement>
 
-  const submitForm = (data: FeedbackInputs) => {
-    console.log(data)
+  const submitForm = () => {
+    setSpinner(true)
+    emailjs
+      .sendForm(
+        'service_g8of8sh',
+        'template_p6ypyju',
+        formRef.current,
+        'aYanjaCWJFcckyAnf'
+      )
+      .then((result) => {
+        setSpinner(false)
+        toast.success(`Сообщение отправлено! ${result.text}`)
+      })
+      .catch((error) => {
+        setSpinner(false)
+        toast.error(`Что-то пошло не так! ${error.text}`)
+      })
+    formRef.current.reset()
   }
 
   return (

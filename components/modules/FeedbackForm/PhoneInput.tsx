@@ -15,7 +15,7 @@ const PhoneInput = ({ register, errors, darkModeClass }: IFeedbackInput) => (
           message: 'Недопустимое значение',
         },
         minLength: 11,
-        maxLength: 11,
+        maxLength: 14,
       })}
     />
     {errors.phone && (
