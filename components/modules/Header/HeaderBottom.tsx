@@ -3,7 +3,7 @@ import { useStore } from 'effector-react'
 import Link from 'next/link'
 
 import styles from './header.module.scss'
-import SearchSvg from '@/components/elements/SearchSvg/SearchSvg'
+// import SearchSvg from '@/components/elements/SearchSvg/SearchSvg'
 import SearchInput from '@/components/elements/Header/SearchInput/SearchInput'
 import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
 import CartPopup from './CartPopup/CartPopup'
@@ -34,11 +34,11 @@ const HeaderBottom = () => {
         </h1>
         <div className={styles.header__search}>
           <SearchInput />
-          <button className={`${styles.header__searcht__btn} ${darkModeClass}`}>
+          {/* <button className={`${styles.header__searcht__btn} ${darkModeClass}`}>
             <span className={styles.header__searcht__btn__span}>
               <SearchSvg />
             </span>
-          </button>
+          </button> */}
         </div>
         <div className={styles.header__shopping_cart}>
           {!isMedia950 && <ModeToggler />}

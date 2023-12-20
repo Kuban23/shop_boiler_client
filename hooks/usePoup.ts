@@ -1,3 +1,8 @@
+import { setSearchInputZIndex } from '@/context/header'
+import {
+  removeClassNamesForOverlayAndBody,
+  toggleClassNamesForOverlayAndBody,
+} from '@/utils/common'
 import React from 'react'
 
 export const usePopup = () => {
@@ -6,16 +11,19 @@ export const usePopup = () => {
   // Функция открытия попапа
   const toggleOpen = () => {
     window.scrollTo(0, 0)
-    document.querySelector('.overlay')?.classList.toggle('.open')
-    document.querySelector('.body')?.classList.toggle('overflow-hidden')
+    toggleClassNamesForOverlayAndBody
+    // document.querySelector('.overlay')?.classList.toggle('.open')
+    // document.querySelector('.body')?.classList.toggle('overflow-hidden')
     setOpen(!open)
   }
 
   // Функция закрытия попапа
   const closePopup = () => {
-    document.querySelector('.overlay')?.classList.remove('.open')
-    document.querySelector('.body')?.classList.remove('overflow-hidden')
+    removeClassNamesForOverlayAndBody()
+    // document.querySelector('.overlay')?.classList.remove('.open')
+    // document.querySelector('.body')?.classList.remove('overflow-hidden')
     setOpen(false)
+    setSearchInputZIndex(1)
   }
 
   React.useEffect(() => {
