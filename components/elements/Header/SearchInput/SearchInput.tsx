@@ -1,28 +1,45 @@
 import React, { MutableRefObject, useRef } from 'react'
 import { useStore } from 'effector-react'
 import Select from 'react-select'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/router'
 
-import { SelectOptionType } from '@/types/common'
+import { IOption, SelectOptionType } from '@/types/common'
 import { inputStyles, controlStyles, menuStyles, optionStyles } from '.'
 import { $mode } from '@/context/mode'
-import { toggleClassNamesForOverlayAndBody } from '@/utils/common'
+import {
+  createSelectOption,
+  removeClassNamesForOverlayAndBody,
+  toggleClassNamesForOverlayAndBody,
+} from '@/utils/common'
 import { $searchInputZIndex, setSearchInputZIndex } from '@/context/header'
 import SearchSvg from '../../SearchSvg/SearchSvg'
 import styles from '../../../modules/Header/header.module.scss'
+import { useDebounceCallback } from '@/hooks/useDebounceCallback'
+import { getPartByName, searchParts } from '@/context/api/boilerParts'
+import { IBoilerPart } from '@/types/boilerparts'
+import {
+  NoOptionsMessage,
+  NoOptionsSpinner,
+} from '../../SelectOptionsMessage/SelectOptionsMessage'
 
 const SearchInput = () => {
   const zIndex = useStore($searchInputZIndex)
   const mode = useStore($mode)
-
+  const spinner = useStore(searchParts.pending)
+  const router = useRouter()
   // делаю условие по теме и применю стили
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   // состояние выподающего списка инпута-поиска
   const [searchOption, setSearchOption] = React.useState<SelectOptionType>(null)
-  // состояние опций выпадающего списка
-  const [options, setOptions] = React.useState(
-    [1, 2, 3, 4, 5].map((item) => ({ value: item, label: item }))
-  )
+
+  // состояние опций выпадающего списка setInputValue
+  const [options, setOptions] = React.useState([])
+
+  // const [options, setOptions] = React.useState(
+  //   [1, 2, 3, 4, 5].map((item) => ({ value: item, label: item }))
+  // )
 
   const [onMenuOpenControlStyles, setOnMenuOpenControlStyles] = React.useState(
     {}
@@ -30,8 +47,12 @@ const SearchInput = () => {
   const [onMenuOpenContainerStyles, setOnMenuOpenContainerStyles] =
     React.useState({})
 
+  const [inputValue, setInputValue] = React.useState('')
+
   const btnRef = useRef() as MutableRefObject<HTMLButtonElement>
   const borderRef = useRef() as MutableRefObject<HTMLSpanElement>
+
+  const delayCallback = useDebounceCallback(1000)
 
   // функция которя будет сетить каждую опцию
   const handleSearchOptionChange = (selectedOption: SelectOptionType) => {
@@ -39,6 +60,15 @@ const SearchInput = () => {
       setSearchOption(null)
       return
     }
+
+    const name = (selectedOption as IOption)?.value as string
+
+    if (name) {
+      getPartAndRedirect(name)
+    }
+
+    setSearchOption(selectedOption)
+    removeClassNamesForOverlayAndBody()
   }
 
   const onFocusSearch = () => {
@@ -46,9 +76,11 @@ const SearchInput = () => {
     setSearchInputZIndex(100)
   }
 
-  const onSearchInputChange = () => {
+  const onSearchInputChange = (text: string) => {
     document.querySelector('.overlay')?.classList.add('open-search')
     document.querySelector('.body')?.classList.add('overflow-hidden')
+
+    delayCallback(() => searchPart(text))
   }
 
   const onSearchMenuOpen = () => {
@@ -81,10 +113,54 @@ const SearchInput = () => {
     borderRef.current.style.display = 'none'
   }
 
+  const searchPart = async (search: string) => {
+    try {
+      setInputValue(search)
+      const data = await searchParts({
+        url: '/boiler-parts/search',
+        search,
+      })
+
+      const names = data
+        .map((item: IBoilerPart) => item.name)
+        .map(createSelectOption)
+
+      setOptions(names)
+    } catch (error) {
+      toast.error((error as Error).message)
+    }
+  }
+
+  const handleSearchClick = async () => {
+    if (!inputValue) {
+      return
+    }
+
+    getPartAndRedirect(inputValue)
+  }
+
+  // функция для переноса на страницу выбранного товара в поиске-Input
+  const getPartAndRedirect = async (name: string) => {
+    const part = await getPartByName({
+      url: '/boiler-parts/name',
+      name,
+    })
+
+    if (!part.id) {
+      toast.warning('Товар не найден.')
+      return
+    }
+
+    router.push(`/catalog/${part.id}`)
+  }
+
   return (
     <>
       <div className={styles.header__search__inner}>
         <Select
+          components={{
+            NoOptionsMessage: spinner ? NoOptionsSpinner : NoOptionsMessage,
+          }}
           placeholder="Я ищу..."
           value={searchOption}
           onChange={handleSearchOptionChange}
@@ -125,11 +201,12 @@ const SearchInput = () => {
         <span ref={borderRef} className={styles.header__search__border} />
       </div>
       <button
-        className={`${styles.header__searcht__btn} ${darkModeClass}`}
+        className={`${styles.header__search__btn} ${darkModeClass}`}
         ref={btnRef}
         style={{ zIndex }}
+        onClick={handleSearchClick}
       >
-        <span className={styles.header__searcht__btn__span}>
+        <span className={styles.header__search__btn__span}>
           <SearchSvg />
         </span>
       </button>

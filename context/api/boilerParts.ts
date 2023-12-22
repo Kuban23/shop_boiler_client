@@ -1,4 +1,5 @@
 import { createEffect } from 'effector-next'
+import { toast } from 'react-toastify'
 
 import api from '@/app/axiosClient'
 
@@ -20,3 +21,23 @@ export const getBoilerPart = createEffect(async (url: string) => {
 
   return data
 })
+
+export const searchParts = createEffect(
+  async ({ url, search }: { url: string; search: string }) => {
+    const { data } = await api.post(url, { search })
+
+    return data.rows
+  }
+)
+
+export const getPartByName = createEffect(
+  async ({ url, name }: { url: string; name: string }) => {
+    try {
+      const { data } = await api.post(url, { name })
+
+      return data
+    } catch (error) {
+      toast.error((error as Error).message)
+    }
+  }
+)
