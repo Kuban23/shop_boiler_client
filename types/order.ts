@@ -6,4 +6,10 @@ export interface IOrderAccordionProps {
 export interface IMakePay {
   url: string
   amount: number
+  description: string
+}
+
+export interface ICheckPay {
+  url: string
+  paymentId: string
 }

@@ -12,9 +12,9 @@ import {
 } from '@/context/shopping-cart'
 import { formatPrice } from '@/utils/common'
 import OrderAccordion from '@/components/modules/OrderPage/OrderAccordion'
-import { makePayment } from '@/context/api/payment'
+import { makePayment, checkPayment } from '@/context/api/payment'
 import { removeFromCart } from '@/context/api/shopping-cart'
-import { $user } from '@/context/user'
+import { $user, $userCity } from '@/context/user'
 import spinnerStyles from '../../modules/AuthPage/spinner/index.module.scss'
 
 const OrderPage = () => {
@@ -28,14 +28,28 @@ const OrderPage = () => {
   const spinner = useStore(makePayment.pending)
   const router = useRouter()
   const user = useStore($user)
+  const userCity = useStore($userCity)
 
   const handleAgreementChange = () => setAgreement(!agreement)
+
+  React.useEffect(() => {
+    const paymentId = sessionStorage.getItem('paymentId')
+
+    if (paymentId) {
+      checkPaypayment(paymentId)
+    }
+  }, [])
 
   const makePay = async () => {
     try {
       const data = await makePayment({
         url: '/payment',
         amount: totalPrice,
+        description: `Заказ №1 ${
+          userCity.city.length
+            ? `Город: ${userCity.city}, улица: ${userCity.street}`
+            : ''
+        }`,
       })
       sessionStorage.setItem('paymentId', data.id)
       router.push(data.confirmation.confirmation_url)
@@ -44,6 +58,31 @@ const OrderPage = () => {
     } catch (error) {
       toast.error((error as Error).message)
     }
+  }
+
+  const checkPaypayment = async (paymentId: string) => {
+    try {
+      const data = await checkPayment({
+        url: '/payment/info',
+        paymentId,
+      })
+
+      if (data.status === 'succeeded') {
+        resetCart()
+        return
+      }
+
+      sessionStorage.removeItem('paymentId')
+    } catch (error) {
+      console.log((error as Error).message)
+      resetCart()
+    }
+  }
+
+  const resetCart = async () => {
+    sessionStorage.removeItem('paymentId')
+    await removeFromCart(`/shopping-cart/all/${user.userId}`)
+    setShoppingCart([])
   }
 
   return (
